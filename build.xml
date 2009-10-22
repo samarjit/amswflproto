@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<project basedir="." default="compile">
+<property name="src" value="${basedir}\src" />
+<property name="build" value="${basedir}\antclasses" />
+<property name="deploy" value="${basedir}\antdeploy" />
+<property name="lib.dir"     value="${basedir}\WebContent\WEB-INF\lib"/>
+<property name="web.dir"     value="${basedir}\WebContent"/>
+<property name="destweb.classes"     value="${deploy}\WEB-INF\classes"/>
+<property name="strutsconf"     value="${src}\struts.xml"/>
+
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+	<target name="init">  
+			  <mkdir dir="${build}"/>
+	</target>
+	<target name="compile">  
+			  <mkdir dir="${build}"/>
+			  <javac srcdir="${src}" destdir="${build}"   classpathref="classpath"/>
+	</target>
+	<target name="deploy1">  
+			  <mkdir dir="${deploy}"/>
+			  <copy file="${basedir}\sample.war" tofile="${deploy}\sample.war"/>
+	</target>
+	<target name="deploy">  
+			  <mkdir dir="${deploy}"/>
+			  <copy todir="${deploy}">
+					<fileset dir="${web.dir}"  />
+					
+			  </copy>
+			  <copy  todir="${destweb.classes}">
+				 <fileset dir="${build}"  />
+			  </copy>
+			  <copy file="${strutsconf}" tofile="${destweb.classes}\struts.xml"/>
+			  <jar destfile="${deploy}/sample.war" basedir="${deploy}" />
+	</target>
+	
+	<target name="clean">  
+	  <delete verbose="true">
+		<fileset dir="${deploy}"/>
+	 </delete>
+	 <delete dir="${deploy}"/>
+	</target>  
+
+	<target name="run">
+	        <java jar="build/jar/HelloWorld.jar" fork="true" classpathref="classpath"/>
+	</target>
+	<target name="run1"> 
+	  <java classname="view.Createhtml">
+           <arg value="-h"/>
+           <classpath>
+             <pathelement location="dist/test.jar"/>
+             <pathelement path="${build}"/>
+           </classpath>
+          </java>
+	</target>
+</project>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<layout>
+  <cell id="0" type="InitialActionCell" height="30.0" width="100.0" x="10.0" y="10.0"/>
+  <cell id="6" type="StepCell" height="30.0" width="100.0" x="156.0" y="208.0"/>
+  <cell id="8" type="StepCell" height="30.0" width="100.0" x="10.0" y="290.0"/>
+  <cell id="5" type="StepCell" height="30.0" width="100.0" x="156.0" y="420.0"/>
+  <cell id="2" type="StepCell" height="30.0" width="100.0" x="398.0" y="160.0"/>
+  <cell id="1" type="StepCell" height="30.0" width="100.0" x="10.0" y="80.0"/>
+  <cell id="3" type="StepCell" height="30.0" width="100.0" x="410.0" y="374.0"/>
+  <cell id="7" type="StepCell" height="30.0" width="100.0" x="10.0" y="220.0"/>
+  <cell id="4" type="StepCell" height="30.0" width="100.0" x="422.0" y="504.0"/>
+  <cell id="2" type="SplitCell" height="30.0" width="100.0" x="264.0" y="90.0"/>
+  <cell id="1" type="SplitCell" height="30.0" width="100.0" x="10.0" y="150.0"/>
+  <cell id="1" type="JoinCell" height="30.0" width="100.0" x="216.0" y="290.0"/>
+  <connector id="1" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0">
+    <routing id="1" x="498" y="190"/>
+    <routing id="1" x="498" y="225"/>
+    <routing id="1" x="533" y="225"/>
+    <routing id="1" x="533" y="190"/>
+  </connector>
+  <connector id="2" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0">
+    <routing id="2" x="498" y="190"/>
+    <routing id="2" x="498" y="225"/>
+    <routing id="2" x="533" y="225"/>
+    <routing id="2" x="533" y="190"/>
+  </connector>
+  <connector id="3" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="4" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="5" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="6" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="7" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="8" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="9" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0">
+    <routing id="9" x="522" y="534"/>
+    <routing id="9" x="522" y="569"/>
+    <routing id="9" x="557" y="569"/>
+    <routing id="9" x="557" y="534"/>
+  </connector>
+  <connector id="10" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0">
+    <routing id="10" x="522" y="534"/>
+    <routing id="10" x="522" y="569"/>
+    <routing id="10" x="557" y="569"/>
+    <routing id="10" x="557" y="534"/>
+  </connector>
+  <connector id="11" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="12" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="13" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="14" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="15" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="17" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="16" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0">
+    <routing id="16" x="256" y="450"/>
+    <routing id="16" x="256" y="485"/>
+    <routing id="16" x="291" y="485"/>
+    <routing id="16" x="291" y="450"/>
+  </connector>
+  <connector id="19" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="18" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+  <connector id="20" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>
+</layout>

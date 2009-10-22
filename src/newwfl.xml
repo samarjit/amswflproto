@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow PUBLIC "-//OpenSymphony Group//DTD OSWorkflow 2.8//EN" "http://www.opensymphony.com/osworkflow/workflow_2_8.dtd">
+<workflow>
+  <meta name="lastModified">Sun Oct 18 20:57:54 GMT+08:00 2009</meta>
+  <meta name="created">Sat Oct 17 02:30:01 GMT+08:00 2009</meta>
+  <meta name="generator">OSWOrkflow Designer</meta>
+  <initial-actions>
+    <action id="0" name="Start Workflow">
+      <results>
+        <unconditional-result id="29" old-status="Finished" status="Queued" step="1"/>
+      </results>
+    </action>
+  </initial-actions>
+  <steps>
+    <step id="1" name="CaptureRequest">
+      <actions>
+        <action id="6" name="CaptureRequest" view="CaptureRequest">
+          <results>
+            <unconditional-result id="7" old-status="Finished" status="Queued" step="2"/>
+          </results>
+        </action>
+      </actions>
+    </step>
+    <step id="2" name="SendMail">
+      <actions>
+        <action id="35" name="SendMail" view="SendMail">
+          <results>
+            <unconditional-result id="36" old-status="Finished" status="Underway" step="4"/>
+          </results>
+        </action>
+      </actions>
+    </step>
+    <step id="4" name="Approve">
+      <actions>
+        <action id="63" name="Approve" view="Approve">
+          <results>
+            <result id="69" old-status="Finished" status="Queued" step="34">
+              <conditions type="AND">
+                <condition name="bsh.condition" type="beanshell">
+                  <arg name="script"><![CDATA[true]]></arg>
+                </condition>
+                <condition name="check.status" type="class">
+                  <arg name="status">Finished</arg>
+                  <arg name="class.name">com.opensymphony.workflow.util.StatusCondition</arg>
+                  <arg name="stepId">4</arg>
+                </condition>
+              </conditions>
+            </result>
+            <result id="70" old-status="Finished" status="Queued" step="33">
+              <conditions type="AND">
+                <condition name="bsh.condition" type="beanshell">
+                  <arg name="script"><![CDATA[false]]></arg>
+                </condition>
+                <condition name="check.status" type="class">
+                  <arg name="status">Finished</arg>
+                  <arg name="class.name">com.opensymphony.workflow.util.StatusCondition</arg>
+                  <arg name="stepId">4</arg>
+                </condition>
+              </conditions>
+            </result>
+            <unconditional-result id="64" old-status="Finished" status="Queued" step="11"/>
+          </results>
+        </action>
+      </actions>
+    </step>
+    <step id="10" name="Finish">
+    </step>
+    <step id="11" name="Approve2">
+      <actions>
+        <action id="59" name="Approve2" view="Approve2">
+          <results>
+            <unconditional-result id="60" old-status="Finished" status="Finished" step="4" owner="${mostRecentOwner}"/>
+          </results>
+        </action>
+      </actions>
+    </step>
+    <step id="33" name="New PC Request">
+      <actions>
+        <action id="51" name="New PC Request" view="New PC Request">
+          <results>
+            <unconditional-result id="52" old-status="Finished" join="23"/>
+          </results>
+        </action>
+      </actions>
+    </step>
+    <step id="34" name="PC Transfer">
+      <actions>
+        <action id="53" name="PC Transfer" view="PC Transfer">
+          <results>
+            <unconditional-result id="54" old-status="Finished" join="23"/>
+          </results>
+        </action>
+      </actions>
+    </step>
+  </steps>
+  <joins>
+    <join id="23">
+      <conditions type="AND">
+        <condition name="bsh.condition" type="beanshell">
+          <arg name="script"><![CDATA["1".equals("1")]]></arg>
+        </condition>
+        <condition name="check.status" type="class">
+          <arg name="status">Approved</arg>
+          <arg name="class.name">com.opensymphony.workflow.util.StatusCondition</arg>
+          <arg name="stepId">4</arg>
+        </condition>
+      </conditions>
+      <unconditional-result id="28" old-status="Finished" status="Queued" step="10"/>
+    </join>
+  </joins>
+</workflow>

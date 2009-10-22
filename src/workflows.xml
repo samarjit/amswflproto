@@ -1,0 +1,6 @@
+<workflows>
+  <workflow name="newwfl" type="resource" location="newwfl.xml" />
+  <workflow name="example" type="resource" location="example.xml" />
+  <workflow name="test2" type="resource" location="test.xml" />
+  <workflow name="dm" type="resource" location="damm.xml" />
+</workflows>
