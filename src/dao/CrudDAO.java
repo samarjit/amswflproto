@@ -13,6 +13,9 @@ import search.ListAttribute;
 import dbconn.DBConnector;
 
 public class CrudDAO {
+	private void log(String s){
+		System.out.println(s);
+	}
 	
 	public String findSplWhereClsOfPanels(String screenName,String panelName){
 		String SQL = 
@@ -24,6 +27,7 @@ public class CrudDAO {
 			while(crs.next()){
 				tableNames = crs.getString("splwhereclause");
 			}
+			crs.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -40,6 +44,7 @@ public class CrudDAO {
 			while(crs.next()){
 				panelNames.add( crs.getString("panel_name"));
 			}
+			crs.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -58,6 +63,7 @@ public class CrudDAO {
 			while(crs.next()){
 				tableNames = crs.getString("table_name");
 			}
+			crs.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -67,12 +73,12 @@ public class CrudDAO {
 	public String createRetrieveQueryPart1(HashMap metadata,String scrname,String panelName) {
 		DBConnector db = new DBConnector();
 		String searchQuery = "";
-		
+		metadata = new HashMap();
 		
 		
 		String SQL2 = 
 			"select lblname,fname,idname,dbcol,datatype,classname,prkey from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
-	//System.out.println(SQL2); 
+	log("createRetrieveQueryPart1:"+SQL2); 
 		 try {
 				CachedRowSet crs = db.executeQuery(SQL2);
 			
@@ -139,11 +145,28 @@ public class CrudDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			 catch (Exception e) {
+				 log(SQL);
+					e.printStackTrace();
+				}
         }
 		
 		return strWhereQuery;
 		 
 		
+	}
+
+	public CachedRowSet executeRetrieveQuery(String sg) throws Exception {
+		DBConnector db = new DBConnector();
+		CachedRowSet crs = null;
+		try {
+			crs = db.executeQuery(sg);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return crs;
 	}
 
 }
