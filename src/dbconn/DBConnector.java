@@ -14,17 +14,21 @@ import com.sun.rowset.CachedRowSetImpl;
 
 
 public class DBConnector { 
-
+private void log(String s){
+//	System.out.println(s);
+}
 private Connection getConnection()
 {
+	 
+	
 	Connection conn = null;
 	try
     {
         String userName = "ams";
         String password = "ams";
-       // String driverName ="com.mysql.jdbc.Driver";
+      // String driverName ="com.mysql.jdbc.Driver";
         String driverName ="oracle.jdbc.driver.OracleDriver";
-      //  String url = "jdbc:mysql://localhost:3306/ams";
+      // String url = "jdbc:mysql://localhost:3306/ams";
         String url = "jdbc:oracle:thin:@127.0.0.1:1521:XE";
       /*  
         //Main xml config to get hibernate config file path
@@ -51,7 +55,12 @@ private Connection getConnection()
        */
         Class.forName (driverName).newInstance ();
         conn = DriverManager.getConnection (url, userName, password);
-        //System.out.println ("Database connection established");
+        
+        if(conn == null){
+        	System.err.print("Some thing wrong with connecting with database!");
+        }
+        
+        //log ("Database connection established");
         //CachedRowSet crs;
         
     }
@@ -70,7 +79,7 @@ public CachedRowSet executeQuery(String qry) throws SQLException{
 		
 		conn = getConnection();
 		Statement stmt = conn.createStatement(); 
-		System.out.println(qry);
+		log(qry);
         ResultSet rs =  stmt.executeQuery(qry);
         
          
@@ -90,9 +99,11 @@ public CachedRowSet executeQuery(String qry) throws SQLException{
             try
             {
                 conn.close ();
-               // System.out.println ("Database connection terminated");
+               // log ("Database connection terminated");
             }
-            catch (Exception e) { /* ignore close errors */ }
+            catch (Exception e) {
+            e.printStackTrace();	
+            /* ignore close errors */ }
         }
     }
 	
@@ -118,7 +129,7 @@ public int executeUpdate(String qry) throws SQLException{
             try
             {
                 conn.close ();
-                //System.out.println ("Database connection terminated");
+                //log ("Database connection terminated");
             }
             catch (Exception e) { /* ignore close errors */ }
         }

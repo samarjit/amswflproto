@@ -155,16 +155,16 @@ public class SearchList extends ActionSupport {
 					}
 					Iterator itr = metadata.keySet().iterator();
 					 while (itr.hasNext()) {
-						String valid = (String) itr.next();
-						ListAttribute ls = (ListAttribute) metadata.get(valid);
-						data  = crs.getString(valid);
-						System.out.println(crs.getString(valid));
+						String fname = (String) itr.next();
+						ListAttribute ls = (ListAttribute) metadata.get(fname);
+						data  = crs.getString(fname);
+						System.out.println(crs.getString(fname));
 						if(firstItr){
-							tableHeader += "<th><div id="+valid+" style='display:none'>"+ls+"</div>"+ls.getLblname()+"</th>";
+							tableHeader += "<th><div id="+fname+" style='display:none'>"+ls+"</div>"+ls.getLblname()+"</th>";
 							
 						}
 						 
-						html += "<td id="+valid+"> "+data+"</td>";
+						html += "<td id="+fname+"> "+data+"</td>";
 							
 					}if(firstItr){
 					 tableHeader += "</tr>";
