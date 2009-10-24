@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <layout>
   <cell id="0" type="InitialActionCell" height="30.0" width="100.0" x="10.0" y="10.0"/>
-  <cell id="8" type="StepCell" height="30.0" width="100.0" x="10.0" y="290.0"/>
-  <cell id="7" type="StepCell" height="30.0" width="100.0" x="10.0" y="220.0"/>
-  <cell id="5" type="StepCell" height="30.0" width="100.0" x="156.0" y="420.0"/>
   <cell id="6" type="StepCell" height="30.0" width="100.0" x="192.0" y="184.0"/>
-  <cell id="4" type="StepCell" height="30.0" width="100.0" x="410.0" y="528.0"/>
+  <cell id="7" type="StepCell" height="30.0" width="100.0" x="10.0" y="220.0"/>
   <cell id="2" type="StepCell" height="30.0" width="100.0" x="398.0" y="160.0"/>
+  <cell id="8" type="StepCell" height="30.0" width="100.0" x="10.0" y="290.0"/>
+  <cell id="4" type="StepCell" height="30.0" width="100.0" x="410.0" y="528.0"/>
+  <cell id="5" type="StepCell" height="30.0" width="100.0" x="156.0" y="420.0"/>
   <cell id="1" type="StepCell" height="30.0" width="100.0" x="10.0" y="80.0"/>
   <cell id="3" type="StepCell" height="30.0" width="100.0" x="410.0" y="374.0"/>
   <cell id="2" type="SplitCell" height="30.0" width="100.0" x="264.0" y="90.0"/>

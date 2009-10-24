@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE workflow PUBLIC "-//OpenSymphony Group//DTD OSWorkflow 2.8//EN" "http://www.opensymphony.com/osworkflow/workflow_2_8.dtd">
 <workflow>
-  <meta name="lastModified">Sun Oct 18 20:57:52 GMT+08:00 2009</meta>
+  <meta name="lastModified">Fri Oct 23 01:57:00 GMT+08:00 2009</meta>
   <meta name="generator">OSWOrkflow Designer</meta>
   <initial-actions>
     <action id="0" name="Start Workflow">
       <restrict-to>
-        <conditions type="AND">
+        <conditions>
           <condition type="beanshell">
             <arg name="script"><![CDATA[true]]></arg>
           </condition>
-          
         </conditions>
       </restrict-to>
       <pre-functions>

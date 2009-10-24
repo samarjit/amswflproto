@@ -22,14 +22,24 @@ public class CrudDAO {
 			"SELECT splwhereclause   FROM  screen_panel where scr_name='"+screenName+"' and panel_name='"+panelName+"' ";
 		DBConnector db = new DBConnector();
 		String tableNames = "";
+		CachedRowSet crs = null;
 		try {
-			CachedRowSet crs = db.executeQuery(SQL);
+			crs = db.executeQuery(SQL);
 			while(crs.next()){
 				tableNames = crs.getString("splwhereclause");
 			}
 			crs.close();
 		}catch(Exception e){
 			e.printStackTrace();
+		}finally{
+			if(crs != null){
+				try {
+					crs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
+			}
 		}
 		return 	tableNames;
 	}
@@ -39,14 +49,24 @@ public class CrudDAO {
 			"SELECT panel_name   FROM  screen_panel where scr_name='"+screenName+"' order by SORTORDER ASC";
 		DBConnector db = new DBConnector();
 		List<String> panelNames = new ArrayList<String>();
+		CachedRowSet crs = null;
 		try {
-			CachedRowSet crs = db.executeQuery(SQL);
+			crs = db.executeQuery(SQL);
 			while(crs.next()){
 				panelNames.add( crs.getString("panel_name"));
 			}
 			crs.close();
 		}catch(Exception e){
 			e.printStackTrace();
+		}finally{
+			if(crs != null){
+				try {
+					crs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
+			}
 		}
 		return 	panelNames;
 	}
@@ -54,33 +74,51 @@ public class CrudDAO {
 	
 	
 	public String findTableByPanels(String screenName,String panelName){
+		String tableNames = "";
 		String SQL = 
 			"SELECT table_name   FROM  screen_panel where scr_name='"+screenName+"' and panel_name='"+panelName+"' ";
 		DBConnector db = new DBConnector();
-		String tableNames = "";
+		//log("findTableName:"+SQL);
+		CachedRowSet crs = null;
 		try {
-			CachedRowSet crs = db.executeQuery(SQL);
+			crs = db.executeQuery(SQL);
 			while(crs.next()){
 				tableNames = crs.getString("table_name");
 			}
 			crs.close();
 		}catch(Exception e){
 			e.printStackTrace();
+		}finally{
+			if(crs != null){
+				try {
+					crs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
+			}
 		}
 		return 	tableNames;
 	}
 	
+	/**
+	 * Creates "DBCOL alias fname," - part of the query
+	 * @param metadata [output] gets filled with details of a column
+	 * @param scrname  [input]
+	 * @param panelName [input]
+	 * @return
+	 */
 	public String createRetrieveQueryPart1(HashMap metadata,String scrname,String panelName) {
 		DBConnector db = new DBConnector();
 		String searchQuery = "";
-		metadata = new HashMap();
-		
+		//metadata = new HashMap();
+		CachedRowSet crs = null;
 		
 		String SQL2 = 
 			"select lblname,fname,idname,dbcol,datatype,classname,prkey from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
 	log("createRetrieveQueryPart1:"+SQL2); 
 		 try {
-				CachedRowSet crs = db.executeQuery(SQL2);
+				 crs = db.executeQuery(SQL2);
 			
 				
 				while(crs.next()){ 
@@ -93,9 +131,9 @@ public class CrudDAO {
 					ls.setLblname(crs.getString("lblname"));
 					ls.setPrkey(crs.getString("prkey"));
 					
-					metadata.put(crs.getString("idname"), ls) ;
+					metadata.put(crs.getString("fname"), ls) ;
 					
-					searchQuery +=crs.getString("dbcol")+" "+crs.getString("idname")+",";
+					searchQuery +=crs.getString("dbcol")+" "+crs.getString("fname")+",";
 				}
 				if(searchQuery.length() > 0){
 					searchQuery = searchQuery.substring(0, searchQuery.length()-1);
@@ -103,12 +141,29 @@ public class CrudDAO {
 				crs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
+			}finally{
+				if(crs != null){
+					try {
+						crs.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
+				}
 			}
-			
+			System.out.println(metadata);
 			return searchQuery;
 	}
 
-	public String createWhereClause(String joiner, String scrname,String panelName,HashMap<String, String> hmWherePanel) {
+	/**
+	 * Creates joiner + DBCOL like '%value%' + joiner ... in loop
+	 * @param joiner [input/output modified] 
+	 * @param scrname [input]
+	 * @param panelName [input]
+	 * @param hmWherePanel [input] whereclause of a planel key/value pair
+	 * @return
+	 */
+	public String createWhereClause(String joiner, String scrname,String panelName,HashMap<String, String> hmWherePanel,boolean exactMatch) {
 		String strWhereQuery = "";
 		DBConnector db = new DBConnector(); 
 		Iterator itr = hmWherePanel.keySet().iterator();
@@ -121,7 +176,8 @@ public class CrudDAO {
             	"select dbcol,datatype from panel_fields where  scr_name='"+scrname+"' and " +
             			"panel_name='"+panelName+"' " +
             			"and UPPER(fname)=UPPER('"+fname+"')";
-        	CachedRowSet crs;
+        //	log("createWhereClause:"+SQL);
+        	CachedRowSet crs = null;
 			try {
 				crs = db.executeQuery(SQL);
 			
@@ -139,8 +195,10 @@ public class CrudDAO {
 	        		if(!"".equals(strWhereQuery)){
 	        			joiner = " AND ";
 	        		}
-	        		strWhereQuery +=joiner+dbcol+" like '%"+val+"%'";
-	        	}
+	        		
+	        		if(exactMatch) strWhereQuery +=joiner+dbcol+" like '"+val+"'";
+	        		else strWhereQuery +=joiner+dbcol+" like '%"+val+"%'";
+	        	}//if crs.next()
 	        	crs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -148,6 +206,15 @@ public class CrudDAO {
 			 catch (Exception e) {
 				 log(SQL);
 					e.printStackTrace();
+			}finally{
+					if(crs != null){
+						try {
+							crs.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						
+					}
 				}
         }
 		

@@ -4,9 +4,9 @@
   <cell id="17" type="StepCell" height="30.0" width="100.0" x="10.0" y="150.0"/>
   <cell id="2" type="StepCell" height="30.0" width="100.0" x="10.0" y="360.0"/>
   <cell id="6" type="StepCell" height="30.0" width="100.0" x="10.0" y="500.0"/>
-  <cell id="1" type="StepCell" height="30.0" width="100.0" x="120.0" y="360.0"/>
-  <cell id="18" type="StepCell" height="30.0" width="100.0" x="10.0" y="220.0"/>
   <cell id="5" type="StepCell" height="30.0" width="100.0" x="10.0" y="80.0"/>
+  <cell id="18" type="StepCell" height="30.0" width="100.0" x="10.0" y="220.0"/>
+  <cell id="1" type="StepCell" height="30.0" width="100.0" x="120.0" y="360.0"/>
   <cell id="4" type="SplitCell" height="30.0" width="100.0" x="10.0" y="290.0"/>
   <cell id="3" type="JoinCell" height="30.0" width="100.0" x="10.0" y="430.0"/>
   <connector id="16" linewidth="1.0" color="-16777216" labelx="500.0" labely="500.0" from="0" to="0"/>

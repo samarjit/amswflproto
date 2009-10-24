@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE workflow PUBLIC "-//OpenSymphony Group//DTD OSWorkflow 2.8//EN" "http://www.opensymphony.com/osworkflow/workflow_2_8.dtd">
 <workflow>
-  <meta name="lastModified">Wed Oct 21 16:40:28 SGT 2009</meta>
+  <meta name="lastModified">Fri Oct 23 01:57:00 GMT+08:00 2009</meta>
   <meta name="created">Wed Oct 21 16:25:55 SGT 2009</meta>
   <meta name="generator">OSWOrkflow Designer</meta>
   <initial-actions>
     <action id="0" name="Start Workflow">
-    <pre-functions>
-				<function type="class">
-					<arg name="class.name">com.opensymphony.workflow.util.Caller</arg>
-				</function>
-	  </pre-functions>
+      <pre-functions>
+        <function type="class">
+          <arg name="class.name">com.opensymphony.workflow.util.Caller</arg>
+        </function>
+      </pre-functions>
       <results>
-        <unconditional-result id="4" old-status="Finished" status="Queued" step="1"  owner="${caller}"/>
+        <unconditional-result id="4" old-status="Finished" status="Queued" step="1" owner="${caller}"/>
       </results>
-      
     </action>
   </initial-actions>
   <steps>
     <step id="1" name="First draft">
       <actions>
         <action id="5" name="Start first draft" view="Start first draft">
-           <pre-functions>
-                <function name="set.caller" type="class">
-                  <arg name="class.name">com.opensymphony.workflow.util.Caller</arg>
-                </function>
-              </pre-functions>
+          <pre-functions>
+            <function name="set.caller" type="class">
+              <arg name="class.name">com.opensymphony.workflow.util.Caller</arg>
+            </function>
+          </pre-functions>
           <results>
             <result id="6" old-status="Finished" status="Underway" step="1" owner="${caller}">
               <conditions>
@@ -35,17 +34,16 @@
                   <arg name="stepId">1</arg>
                 </condition>
               </conditions>
-             
             </result>
-            <unconditional-result id="9" old-status="Finished" status="Queued" step="1"  owner="${caller}"/>
+            <unconditional-result id="9" old-status="Finished" status="Queued" step="1" owner="${caller}"/>
           </results>
         </action>
         <action id="7" name="Finish First Draft" view="Finish First Draft">
-            <pre-functions>
-                <function name="set.caller" type="class">
-                  <arg name="class.name">com.opensymphony.workflow.util.Caller</arg>
-                </function>
-              </pre-functions>
+          <pre-functions>
+            <function name="set.caller" type="class">
+              <arg name="class.name">com.opensymphony.workflow.util.Caller</arg>
+            </function>
+          </pre-functions>
           <results>
             <result id="8" old-status="Finished" status="Underway" step="3" owner="${caller}">
               <conditions type="AND">
@@ -56,13 +54,11 @@
                 </condition>
                 <condition name="allow.owner.only" type="class">
                   <arg name="class.name">com.opensymphony.workflow.util.AllowOwnerOnlyCondition</arg>
-                   
                 </condition>
               </conditions>
             </result>
-            <unconditional-result id="11" old-status="Finished" status="Underway" step="1"  owner="${caller}"/>
+            <unconditional-result id="11" old-status="Finished" status="Underway" step="1" owner="${caller}"/>
           </results>
-			
         </action>
       </actions>
     </step>

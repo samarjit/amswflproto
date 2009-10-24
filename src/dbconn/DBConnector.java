@@ -15,7 +15,7 @@ import com.sun.rowset.CachedRowSetImpl;
 
 public class DBConnector { 
 private void log(String s){
-//	System.out.println(s);
+	//System.out.println(s);
 }
 private Connection getConnection()
 {
@@ -27,7 +27,7 @@ private Connection getConnection()
         String userName = "ams";
         String password = "ams";
       // String driverName ="com.mysql.jdbc.Driver";
-        String driverName ="oracle.jdbc.driver.OracleDriver";
+        String driverName ="oracle.jdbc.OracleDriver";
       // String url = "jdbc:mysql://localhost:3306/ams";
         String url = "jdbc:oracle:thin:@127.0.0.1:1521:XE";
       /*  
@@ -60,7 +60,7 @@ private Connection getConnection()
         	System.err.print("Some thing wrong with connecting with database!");
         }
         
-        //log ("Database connection established");
+        log ("Database connection established");
         //CachedRowSet crs;
         
     }
@@ -87,6 +87,7 @@ public CachedRowSet executeQuery(String qry) throws SQLException{
         crs.populate(rs); 
         rs.close(); 
         stmt.close();
+        
          
 	} catch (SQLException e) {
 		e.printStackTrace();
@@ -99,7 +100,8 @@ public CachedRowSet executeQuery(String qry) throws SQLException{
             try
             {
                 conn.close ();
-               // log ("Database connection terminated");
+                conn =null;
+               log ("Database connection terminated");
             }
             catch (Exception e) {
             e.printStackTrace();	
