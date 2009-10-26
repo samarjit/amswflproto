@@ -98,9 +98,9 @@ public class SearchList extends ActionSupport {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		String colquery ="";
 		String SQL2 = 
-			"select lblname,fname,idname,dbcol,datatype,classname,prkey from panel_fields where  scr_name='"+scrname+"' and panel_name='"+relatedPanel+"'";
+			"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+relatedPanel+"'";
 		//System.out.println(SQL2); 
 		 
         try {
@@ -115,10 +115,15 @@ public class SearchList extends ActionSupport {
 				ls.setIdname(crs.getString("idname"));
 				ls.setLblname(crs.getString("lblname"));
 				ls.setPrkey(crs.getString("prkey"));
+				colquery = crs.getString("strquery");
 				
 				metadata.put(crs.getString("idname"), ls) ;
-				
-				searchQuery +=crs.getString("dbcol")+" "+crs.getString("idname")+",";
+				if(colquery !=null && colquery.length() > 1){
+					searchQuery +="("+colquery+") "+crs.getString("fname")+",";
+				}else{
+				    searchQuery +=crs.getString("dbcol")+" "+crs.getString("idname")+",";
+				}
+				colquery = "";
 			}
 			if(searchQuery.length() > 0){
 				searchQuery = searchQuery.substring(0, searchQuery.length()-1);

@@ -111,11 +111,12 @@ public class CrudDAO {
 	public String createRetrieveQueryPart1(HashMap metadata,String scrname,String panelName) {
 		DBConnector db = new DBConnector();
 		String searchQuery = "";
+		String colquery ="";
 		//metadata = new HashMap();
 		CachedRowSet crs = null;
 		
 		String SQL2 = 
-			"select lblname,fname,idname,dbcol,datatype,classname,prkey from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
+			"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
 	log("createRetrieveQueryPart1:"+SQL2); 
 		 try {
 				 crs = db.executeQuery(SQL2);
@@ -130,10 +131,13 @@ public class CrudDAO {
 					ls.setIdname(crs.getString("idname"));
 					ls.setLblname(crs.getString("lblname"));
 					ls.setPrkey(crs.getString("prkey"));
-					
+					colquery = crs.getString("strquery");
 					metadata.put(crs.getString("fname"), ls) ;
-					
-					searchQuery +=crs.getString("dbcol")+" "+crs.getString("fname")+",";
+					if(colquery !=null && colquery.length() > 1){
+						searchQuery +="("+colquery+") "+crs.getString("fname")+",";
+					}else{
+						searchQuery +=crs.getString("dbcol")+" "+crs.getString("fname")+",";
+					}
 				}
 				if(searchQuery.length() > 0){
 					searchQuery = searchQuery.substring(0, searchQuery.length()-1);
@@ -234,6 +238,139 @@ public class CrudDAO {
 			throw e;
 		}
 		return crs;
+	}
+
+	public String findPreDefQuery(String screenName, String panelName) {
+		String preDefQuery = "";
+		String SQL = "select SELQUERY from screen_panel  where scr_name='"+screenName+"' and panel_name='"+panelName+"' ";
+		DBConnector db = new DBConnector();
+		CachedRowSet crs = null;
+		try{
+			crs = db.executeQuery(SQL);
+			while(crs.next()){
+				preDefQuery = crs.getString("SELQUERY");
+			}
+		}catch(SQLException e){
+			log(e.getMessage());
+		}
+		return preDefQuery;
+	}
+
+	public String createUpdateQueryPart1(HashMap metadata, String scrname,
+			String panelName,HashMap updateClause) {
+		DBConnector db = new DBConnector();
+		String strQuery="";
+		String searchQuery = "";
+		String colquery ="";
+		//metadata = new HashMap();
+		CachedRowSet crs = null;
+		log(updateClause.toString());
+		String SQL2 = 
+			"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
+	log("createUpdateQueryPart1:"+SQL2); 
+		 try {
+				 crs = db.executeQuery(SQL2);
+			
+				
+				while(crs.next()){ 
+					ListAttribute ls = new ListAttribute();
+					ls.setClassname(crs.getString("classname"));
+					ls.setDatatype(crs.getString("datatype"));
+					ls.setDbcol(crs.getString("dbcol"));
+					ls.setFname(crs.getString("fname"));
+					ls.setIdname(crs.getString("idname"));
+					ls.setLblname(crs.getString("lblname"));
+					ls.setPrkey(crs.getString("prkey"));
+					colquery = crs.getString("strquery");
+					
+					String fname= crs.getString("fname");
+					if(updateClause.get(fname.toLowerCase())!= null)
+						{
+						searchQuery +=crs.getString("dbcol")+"= '"+updateClause.get(fname.toLowerCase())+"' ,";
+						metadata.put(crs.getString("fname"), ls) ;
+						}
+					 
+				}
+				if(searchQuery.length() > 0){
+					searchQuery = searchQuery.substring(0, searchQuery.length()-1);
+				}
+				crs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				if(crs != null){
+					try {
+						crs.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
+				}
+			}
+			System.out.println(metadata);
+			return searchQuery;
+		
+	}
+
+	public HashMap createInsertQueryPart1(HashMap metadata, String scrname,
+		String panelName,HashMap updateClause) {
+			DBConnector db = new DBConnector();
+			String strQuery="";
+			HashMap inesrtqryPart = new HashMap();
+			String dbcolStr = "";
+			String valueStr = "";
+			String colquery ="";
+			//metadata = new HashMap();
+			CachedRowSet crs = null;
+			log(updateClause.toString());
+			String SQL2 = 
+				"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
+		log("createUpdateQueryPart1:"+SQL2); 
+			 try {
+					 crs = db.executeQuery(SQL2);
+				
+					
+					while(crs.next()){ 
+						ListAttribute ls = new ListAttribute();
+						ls.setClassname(crs.getString("classname"));
+						ls.setDatatype(crs.getString("datatype"));
+						ls.setDbcol(crs.getString("dbcol"));
+						ls.setFname(crs.getString("fname"));
+						ls.setIdname(crs.getString("idname"));
+						ls.setLblname(crs.getString("lblname"));
+						ls.setPrkey(crs.getString("prkey"));
+						colquery = crs.getString("strquery");
+						
+						String fname= crs.getString("fname");
+						if(updateClause.get(fname.toLowerCase())!= null)
+							{
+							dbcolStr +=crs.getString("dbcol")+",";
+							valueStr += "'"+updateClause.get(fname.toLowerCase())+"' ,";
+							metadata.put(crs.getString("fname"), ls) ;
+							}
+						 
+					}
+					if(dbcolStr.length() > 1){
+						dbcolStr = dbcolStr.replaceAll(",$","");
+						valueStr = valueStr.replaceAll(",$", "");
+						inesrtqryPart.put("dbcolstr", dbcolStr);
+						inesrtqryPart.put("valuestr", valueStr);
+					}
+					crs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}finally{
+					if(crs != null){
+						try {
+							crs.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						
+					}
+				}
+				//System.out.println(metadata);
+				return inesrtqryPart;
 	}
 
 }

@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import javax.sql.rowset.CachedRowSet;
 
+import util.Utility;
+
 import dao.CrudDAO;
 import dbconn.DBConnector;
 
@@ -19,28 +21,14 @@ public class RetreiveData {
 		System.out.println(s);
 	}
 	
-	/**
-	 * @return where clause as key value pair in hashmaps, these hashmaps are again encapsulated into 
-	 * another hashmap whose key will be panelName
-	 */
-	public HashMap<String, String> extractWhereClause(/*String whereStringOfPanel String panelName */){
-		//"whereClausefrmRequest"
-		
-		String strWhereClause = "empid!0~#empname!sam samanta";
-		String[] arWhere = strWhereClause.split("~#");
-		HashMap<String,String> whereClausePart = new HashMap<String, String>();
-		for(String strWhrKVpair:arWhere){
-			String[] kvpair = strWhrKVpair.split("!");
-			whereClausePart.put(kvpair[0], kvpair[1]);
-		}
-		return whereClausePart;
-	}
+	
 	
 	public void doRetrieveData() throws Exception{
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
-		List <String> lstPanelName = cd.findPanelByScrname("frmRequest");
-		HashMap<String, String> hmWhere = extractWhereClause(/*String whereStringOfPanel, String panelName */);
+		String scrName="frmRequest";
+		List <String> lstPanelName = cd.findPanelByScrname(scrName);
+		HashMap<String, String> hmWhere = Utility.extractWhereClause( "empid!0~#empname!sam samanta"/*String whereStringOfPanel, String panelName */);
 		String html = ""; //outer
 		String htmlTemp = "";
 		CachedRowSet crs = null;
@@ -55,7 +43,7 @@ public class RetreiveData {
 		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
 			metadata = new HashMap();
 			//column metadata should get populated here
-			String sg = createRetrieveQuery(metadata, "frmRequest",	panelName, hmWhere);
+			String sg = createRetrieveQuery(metadata, scrName,	panelName, hmWhere);
 			log("Retrieve query:" + sg);
 			
 			String tableHeader = "No data found";
@@ -69,7 +57,6 @@ public class RetreiveData {
 					
 					//Ideally this loop should run once in case of detail-data retrieval
 					while (crs.next()) {
-log("stupid!!!");
 						htmlTemp += "\n<tr >";
 						if (firstItr) {
 							tableHeader = "\n<tr >";
@@ -139,15 +126,19 @@ log("stupid!!!");
 	 * @return
 	 */
 	private String createRetrieveQuery(HashMap metadata,String scrname,String panelName, HashMap<String,String> hmWherePanel) {
-		String searchQuery ="";
-		
+		String retrieveQuery ="";
+		String joiner = " WHERE ";
 		
 		CrudDAO cd = new CrudDAO();
+		String predefQuery = cd.findPreDefQuery(scrname,panelName);
+		if(predefQuery!=null && predefQuery.length() > 0 ){
+			joiner =" AND ";
+		}
 		String qryPart1 = cd.createRetrieveQueryPart1(metadata,scrname,panelName);
 		String tableName =  cd.findTableByPanels(scrname,panelName);
 		String splWhereClause = cd.findSplWhereClsOfPanels(scrname,panelName);
 		  
-		String joiner = " WHERE ";
+		
 		if(splWhereClause != null && ! "".equals(splWhereClause) ){
 			splWhereClause += joiner + splWhereClause+" ";
 			joiner =" AND ";
@@ -159,10 +150,16 @@ log("stupid!!!");
 		System.out.println("strWhereQuery="+strWhereQuery+"table name:"+tableName);
 		
 		if(tableName!= null && tableName.length() >0 && strWhereQuery!=null && strWhereQuery.length()>0)
-		searchQuery ="SELECT  "+qryPart1 +" FROM "+tableName+splWhereClause+strWhereQuery;
-		else log("Incomplete query was:"+"SELECT  "+qryPart1 +" FROM "+tableName+splWhereClause+strWhereQuery);
+			if(predefQuery!=null && predefQuery.length() > 0 ){
+				retrieveQuery =predefQuery+" "+splWhereClause+strWhereQuery;
+			}else{
+				retrieveQuery ="SELECT  "+qryPart1 +" FROM "+tableName+splWhereClause+strWhereQuery; 
+			}
+		else {
+			log("Incomplete query was:"+"SELECT  "+qryPart1 +" FROM "+tableName+splWhereClause+strWhereQuery);
+		}
 		
-		return searchQuery;
+		return retrieveQuery;
 	}
 	
 
