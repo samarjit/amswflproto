@@ -20,7 +20,7 @@ public class Createhtml {
 	private String ncol ;
 	private String nrow ;
 	private String panel_name ;
-	private String queryname ;
+	private String strquery ;
 	private String scr_Name ;
 	private String validation ;
 	private String classname;
@@ -90,7 +90,7 @@ public class Createhtml {
 		
 		String SQL = 
 			"SELECT scr_Name, panel_name, lblname, fname, idname, datatype," +
-					" dbcol, validation, queryname, nrow, ncol,classname,htmlelm FROM  panel_fields where scr_name='"+screenName+"' AND panel_name='"+panelName+"' order by orderNo";
+					" dbcol, validation, strquery , nrow, ncol,classname,htmlelm FROM  panel_fields where scr_name='"+screenName+"' AND panel_name='"+panelName+"' order by orderNo";
 		//System.out.println(SQL);
 		
 		try {
@@ -133,7 +133,7 @@ public class Createhtml {
 				ncol = crs.getString("ncol");
 				nrow = crs.getString("nrow");
 				panel_name = crs.getString("panel_name");
-				queryname = crs.getString("queryname");
+				strquery = crs.getString("strquery");
 				scr_Name = crs.getString("scr_Name");
 				validation = crs.getString("validation");
 				classname = crs.getString("classname");

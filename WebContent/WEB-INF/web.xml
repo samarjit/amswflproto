@@ -20,12 +20,24 @@ id="WebApp_ID" version="2.5">
 		<display-name>
 		WorkflowController</display-name>
 		<servlet-name>WorkflowController</servlet-name>
+		<servlet-class>workflow.WorkflowController</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		WorkflowSearch</display-name>
+		<servlet-name>WorkflowSearch</servlet-name>
 		<servlet-class>
-		WorkflowController</servlet-class>
+		workflow.WorkflowSearch</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>WorkflowController</servlet-name>
 		<url-pattern>/WorkflowController.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>WorkflowSearch</servlet-name>
+		<url-pattern>/WorkflowSearch.do</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

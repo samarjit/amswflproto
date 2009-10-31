@@ -3,9 +3,10 @@
 "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-	<package name="default" namespace="/" extends="struts-default">
-		<action name="sampleAction" class="view.actionclass">
-			<result name="success">/login.jsp</result>
+	<package name="workflow" namespace="/" extends="struts-default">
+		<action name="login" class="view.login">
+			<result name="success">/pages/dashboard.jsp</result>
+			<result name="error">/pages/error.jsp</result>
 		</action>
 	</package>
 	<package name="default2" namespace="/" extends="struts-default">

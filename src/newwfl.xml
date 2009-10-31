@@ -6,8 +6,13 @@
   <meta name="generator">OSWOrkflow Designer</meta>
   <initial-actions>
     <action id="0" name="Start Workflow">
+    <pre-functions>
+        <function type="class">
+          <arg name="class.name">com.opensymphony.workflow.util.Caller</arg>
+        </function>
+      </pre-functions>
       <results>
-        <unconditional-result id="29" old-status="Finished" status="Queued" step="1"/>
+        <unconditional-result id="29" old-status="Finished" status="Queued" step="1" owner="${caller}"/>
       </results>
     </action>
   </initial-actions>
@@ -16,7 +21,7 @@
       <actions>
         <action id="6" name="CaptureRequest" view="CaptureRequest">
           <results>
-            <unconditional-result id="7" old-status="Finished" status="Queued" step="2"/>
+            <unconditional-result id="7" old-status="Finished" status="Queued" step="2" owner="${caller}"/>
           </results>
         </action>
       </actions>
@@ -69,7 +74,7 @@
       <actions>
         <action id="59" name="Approve2" view="Approve2">
           <results>
-            <unconditional-result id="60" old-status="Finished" status="Finished" step="4" owner="${mostRecentOwner}"/>
+            <unconditional-result id="60" old-status="Finished" status="Finished" step="4" owner="${caller}"/>
           </results>
         </action>
       </actions>

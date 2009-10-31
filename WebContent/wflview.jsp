@@ -4,19 +4,22 @@
                  com.opensymphony.workflow.spi.Step,
                  java.util.*,
                  com.opensymphony.workflow.loader.WorkflowDescriptor,
-                 com.opensymphony.workflow.loader.ActionDescriptor"%>
+                 com.opensymphony.workflow.loader.ActionDescriptor,
+                 dto.WflViewDTO"%>
 <% response.setHeader("Pragma","no-cache");
   response.setDateHeader("Expires",0);
   response.setHeader("Cache-Control","no-cache");
 %>                 
 <%
 String wflSession = "";
-if((String) session.getAttribute("username") != null)wflSession = (String) session.getAttribute("username");
-else if(request.getParameter("username") != null) wflSession = request.getParameter("username") ;
-    Workflow wf = new BasicWorkflow(wflSession);
+WflViewDTO wflDTO = (WflViewDTO) session.getAttribute("wflviewdto"); 
+wflSession = wflDTO.getWflsessionname();
+Workflow wf = new BasicWorkflow(wflSession);
 
-    long id = Long.parseLong(request.getParameter("id"));
-
+    long id = Long.parseLong(wflDTO.getWflid());
+    if(request.getParameter("id") !=null )
+    id = Long.parseLong(request.getParameter("id"));
+    
     String doString = request.getParameter("do");
     if (doString != null && !doString.equals("")) {
         int action = Integer.parseInt(doString);
@@ -30,21 +33,21 @@ else if(request.getParameter("username") != null) wflSession = request.getParame
     for (int i = 0; i < actions.length; i++) {
         String name = wd.getAction(actions[i]).getName();
         %>
-        <li> <a href="wflview.jsp?id=<%=id%>&do=<%= actions[i] %>"><%= name %></a>
+        <li> <a href="wflview.jsp?id=<%=id%>&do=<%= actions[i] %>"><%= name %></a></li>
         <%
     }
 %>
 
 <hr>
 <b>Permissions</b>
-<p>
+<p>&nbsp;</p>
 
 <%
     List perms = wf.getSecurityPermissions(id, null);
     for (Iterator iterator = perms.iterator(); iterator.hasNext();) {
         String perm = (String) iterator.next();
 %>
-    <li><%= perm %>
+    <li><%= perm %></li>
 <%
     }
 %>
@@ -75,7 +78,7 @@ else if(request.getParameter("username") != null) wflSession = request.getParame
         ActionDescriptor action = wd.getAction(step.getActionId());
         %>
         <tr>
-        <td><%= (String) session.getAttribute("username") %></td>
+        <td><%= wflSession %></td>
         <td><%= id %></td>
             <td><%= wd.getStep(step.getStepId()).getName()%> (<%= step.getId() %>)</td>
             <td><%= action == null ? "NONE" : action.getName() %></td>

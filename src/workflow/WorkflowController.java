@@ -21,12 +21,17 @@ import com.opensymphony.workflow.WorkflowException;
 import com.opensymphony.workflow.basic.BasicWorkflow;
 import com.opensymphony.workflow.loader.WorkflowDescriptor;
 
+import dto.ApplicationDTO;
+import dto.UserDTO;
+
 /**
  * Servlet implementation class WorkflowController.
  * @Author: Samarjit
  * @version: 1.0
  */
 public class WorkflowController extends HttpServlet {
+	 
+	
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -41,37 +46,67 @@ public class WorkflowController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String url ="";
 		if(request.getParameter("create")!=null){
-			HttpSession session = request.getSession(true);
-			//if( session.getAttribute("workflowSessName") == null || "".equals(session.getAttribute("workflowSessName")))
-				if(request.getParameter("workflowSessName") != null && !"".equals(request.getParameter("workflowSessName")))
-				{
-					session.setAttribute("workflowSessName",request.getParameter("workflowSessName"));
-				}
-			    Workflow wf = new BasicWorkflow((String) session.getAttribute("workflowSessName"));
-			    try {
-					long id = wf.initialize("newwfl",0, null);
-					System.out.println("Workflow Initialized:"+ Long.toString(id));
-					session.setAttribute("wflId", id);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				session.setAttribute("username", request.getParameter("workflowSessName"));
-		}else if(request.getParameter("action") != null){
+			System.out.println("creating new application");
 			HttpSession session = request.getSession(false);
+			//if( session.getAttribute("workflowSessName") == null || "".equals(session.getAttribute("workflowSessName")))
+			UserDTO usrDTO = (UserDTO) session.getAttribute("userSessionData");	
+			String activityname = request.getParameter("activityname");
+			System.out.println("activityname:"+activityname);
+			WorkflowBean wflBean = new WorkflowBean();
+			long wflid = 0;
+			if(activityname!=null && !"".equals(activityname)){
+				ApplicationDTO appdto = new ApplicationDTO();
+				
+				String appid = wflBean.getNewApplicationId();
+				String WflName = wflBean.getSuitableWorkflowName(activityname);
+				wflid = wflBean.workflowInit(appid,WflName,null);
+				wflBean.createApplicationWfl(usrDTO.getUserid(),wflid,appid,"S");//'S' for started
+				//wflBean.createApplicationStatus(appid,activityname);
+				
+				HashMap hmActions= new HashMap();
+				
+				Workflow wf = new BasicWorkflow(appid);
+				int[] actions = wf.getAvailableActions(wflid, null);
+			    WorkflowDescriptor wd =  wf.getWorkflowDescriptor(wf.getWorkflowName(wflid));
+			    for (int i = 0; i < actions.length; i++) {
+			        String name = wd.getAction(actions[i]).getName();
+			        System.out.print(actions[i]+" "+name +" \n");
+			        hmActions.put( name,actions[i]);
+			        //<a href="wflview.jsp?id=<%=id%>&do=<%= actions[i] %>"><%= name %></a>
+			       
+			        //get the first screen to display
+			        if("".equals(url)){
+			        	url = wflBean.getScreenId(name);
+			        	appdto.setCurrentActionId(actions[i]);
+			        	appdto.setCurrentAction(name);
+			        }
+			    }
+				
+				
+				appdto.setAppid(String.valueOf(appid));
+				appdto.setCurrStage(activityname);
+				appdto.setWorkflowName(WflName);
+				appdto.setWflid(wflid);
+				appdto.setWflactions(hmActions);
+				session.setAttribute("applicationDTO",appdto);
+				 
+			}
+			 //setting this for master workflowview will change it later
+				session.setAttribute("username", usrDTO.getUserid());
+		}else if(request.getParameter("action") != null){
+			HashMap hmActions= new HashMap();
 			String wflSession = "";
-			//if((String) session.getAttribute("workflowSessName") != null){wflSession = (String) session.getAttribute("workflowSessName");
-			// System.out.print("Got form Session "+wflSession+"!");
-			// 			 }
-			 if(request.getParameter("workflowSessName") != null) wflSession = request.getParameter("workflowSessName") ;
+			WorkflowBean wflBean = new WorkflowBean();
+			
+			HttpSession session = request.getSession(false);
+			ApplicationDTO appdto = (ApplicationDTO)session.getAttribute("applicationDTO");
+			wflSession = appdto.getAppid();
 			    Workflow wf = new BasicWorkflow(wflSession);
 			    //id is wflId
-			    long id = 0;
-			    if(request.getParameter("id") != null) 
-			    	id = Long.parseLong(request.getParameter("id"));
-			    else if((String) session.getAttribute("wflId") != null) 
-			        id = Long.parseLong((String) session.getAttribute("wflId"));
-
+			    long id = appdto.getWflid();
+			     
 			    String doString = request.getParameter("do");
 			    if (doString != null && !doString.equals("")) {
 			        int action = Integer.parseInt(doString);
@@ -84,21 +119,49 @@ public class WorkflowController extends HttpServlet {
 					}
 			    }
 			    System.out.print("WflSession:"+wflSession+"  wflId:"+Long.toString(id)+ " do:"+doString+"  ");
-			    HashMap hmActions= new HashMap();
+			    
 			    int[] actions = wf.getAvailableActions(id, null);
 			    WorkflowDescriptor wd =  wf.getWorkflowDescriptor(wf.getWorkflowName(id));
 			    for (int i = 0; i < actions.length; i++) {
 			        String name = wd.getAction(actions[i]).getName();
 			        System.out.print(actions[i]+" "+name +" \n");
-			        hmActions.put(actions[i], name);
+			        hmActions.put( name,actions[i]);
 			        //<a href="wflview.jsp?id=<%=id%>&do=<%= actions[i] %>"><%= name %></a>
+			        
+			        if("".equals(url)){
+			        	url = wflBean.getScreenId(name);
+			        	appdto.setCurrentActionId(actions[i]);
+			        	appdto.setCurrentAction(name);
+			        }
+			    }
+			    if(actions.length == 0){
+			    	appdto.setCurrentActionId(-1);
+		        	appdto.setCurrentAction("");
 			    }
 			    
+			    appdto.setWflactions(hmActions);
+			    session.setAttribute("applicationDTO",appdto);
+			    //wflsubmit by chance if it gets called
 			    session.setAttribute("wflId",id);
 			    session.setAttribute("workflowSessName",wflSession);
 			    request.setAttribute("hmActions", hmActions);
+		}else if(request.getParameter("navigateto") != null){
+			WorkflowBean wflBean = new WorkflowBean();
+			HttpSession session = request.getSession(false);
+			String pageName = request.getParameter("navigateto");
+			
+			ApplicationDTO appdto = (ApplicationDTO)session.getAttribute("applicationDTO");
+		    HashMap<String,Integer> hmactions = appdto.getWflactions();
+			
+			System.out.print("navigate-WflSession:"+appdto.getAppid()+"  wflId:"+appdto.getWflid()+ " topage:"+pageName);
+			    
+			        	url = wflBean.getScreenId(pageName);
+			        	appdto.setCurrentAction(pageName);
+			        	appdto.setCurrentActionId( hmactions.get(pageName));
+			        	session.setAttribute("applicationDTO",appdto);
 		}
-		String url =response.encodeURL("/wflsubmit.jsp"); 
+		System.out.println("url:"+url); 
+		if("".equals(url))url =response.encodeURL("/wflsubmit.jsp"); 
 		getServletConfig().getServletContext().getRequestDispatcher(url).forward(request,response);
 	}
 

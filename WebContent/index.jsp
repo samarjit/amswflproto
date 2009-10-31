@@ -38,5 +38,6 @@ WorkflowSession Name:<input name="workflowSessName" /><br/>
 <input type="submit" />
 </form>
 
+<a href="pages/login.jsp" >workflow proto</a>
 </body>
 </html>
