@@ -56,7 +56,7 @@ public class WorkflowSearch extends HttpServlet {
 				
 				Iterator<String> itr = hmwflsess.keySet().iterator();
 				while(itr.hasNext()){
-					String strwflsess = (String) itr.next(); //wfl session 
+					String strwflsess = (String) itr.next(); //wfl session = appid
 					temphtmlStr="<br>"+strwflsess;
 					arwflId = hmwflsess.get(strwflsess);
 					Workflow wf = new BasicWorkflow(strwflsess);
@@ -81,7 +81,7 @@ public class WorkflowSearch extends HttpServlet {
 					}
 				}
 				System.out.println(htmlStr);
-				if(htmlStr.length() < 1)htmlStr="No data found";
+				if(htmlStr==null || htmlStr.length() < 1)htmlStr="No data found";
 				out.print(htmlStr);
 			 
 	}

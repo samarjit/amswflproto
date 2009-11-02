@@ -38,26 +38,30 @@ public class WorkflowDAO {
 		HashMap<String, ArrayList<String>> wflsesshm = new HashMap<String, ArrayList<String>>();
 		
 		try{
-			crs = db.executeQuery(SQL);
+		//	crs = db.executeQuery(SQL);
 			
-			while(crs.next()){
-				 appid= crs.getString("APPID");
-				if(appid== null)continue;
-				if(applicationId != null){
-					if(!appid.equals(applicationId))continue;
-					System.out.println("application id found"+applicationId);
-				}
+		//	while(crs.next()){
+				// appid= crs.getString("APPID");
+				  
+				
 				SQL2 = "SELECT  " +
 				"U.WFLID, U.USERID, U.STATUS, U.APPID " +
-				"FROM  USER_WFLID_APPID U where U.STATUS='S' and U.USERID='"+userid+"' AND U.APPID='"+appid+"'";
-				
-				crs2= db.executeQuery(SQL2);
-				arwflid = new ArrayList<String>();
-				while(crs2.next()){
-					arwflid.add(crs2.getString("WFLID"));
+				"FROM  USER_WFLID_APPID U where U.STATUS='S' and U.USERID='"+userid+"'";
+				if(applicationId != null && !"".equals(applicationId)){
+					SQL2+= " AND U.APPID='"+applicationId+"'";
 				}
-				wflsesshm.put(appid,arwflid);
-			}
+				crs2= db.executeQuery(SQL2);
+				
+				while(crs2.next()){
+					arwflid = new ArrayList<String>();
+					appid = crs2.getString("APPID");
+					
+					arwflid.add(crs2.getString("WFLID"));
+					if(appid!=null && !"".equals(appid))
+					wflsesshm.put(appid,arwflid);
+				}
+				
+			//}
 			
 			
 		}catch(SQLException e){

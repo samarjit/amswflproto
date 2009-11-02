@@ -18,6 +18,10 @@ function sendAjaxPost(strURL,data,callbak){
 	xmlhttpPost();
 	if(strURL == null)
 		strURL="searchlist.action";
+	var rnum = Math.random()*1000;
+	alert(rnum);
+	if(strURL.indexOf("?") >-1)strURL+="&rnum="+rnum;
+	else strURL+="?rnum="+rnum;
 	
 	 if(data == null)data="";
 	 if(typeof( callbak) !="undefined" )mycallback = callbak;
@@ -33,6 +37,11 @@ function sendAjaxGet(strURL,callbak){
 	if(strURL == null)
 	strURL="searchlist.action";
 	 
+	var rnum = Math.random()*1000;
+	alert(rnum);
+	if(strURL.indexOf("?") >-1)strURL+="&rnum="+rnum;
+	else strURL+="?rnum="+rnum;
+	
 	 if(typeof( callbak) !="undefined" )mycallback = callbak;
 	self.xmlHttpReq.open('GET', strURL, true);
 	self.xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

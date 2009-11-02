@@ -28,7 +28,7 @@ function fnsubmit(ac) {
 	}else if(ac=='RFQ'){
 		
 	}
-	alert(url);
+	//alert(url);
 document.getElementById("frmmenu").action = url;
 location.href=url;
 }
@@ -37,7 +37,7 @@ function fnsearch() {
 	//document.getElementById("frmsearch").submit();
 	var url=ctxpath+'<%= response.encodeURL("/WorkflowSearch.do") %>?';
 	url+="appid="+document.getElementsByName("appId")[0].value;
-	prompt("url",url);
+	//prompt("url",url);
 	sendAjaxGet(url,searchcallback);
 	}
 function searchcallback(param){

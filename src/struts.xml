@@ -11,7 +11,7 @@
 	</package>
 	<package name="default2" namespace="/" extends="struts-default">
 		<action name="dynamic" class="view.actionclass">
-			<result name="success">/index.jsp</result>
+			<result  name="success">/index.jsp</result>
 		</action>
 	</package>
 	<package name="template1" namespace="/" extends="struts-default">
