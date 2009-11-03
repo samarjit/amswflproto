@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
+
 import workflow.WorkflowBean;
 
 import com.opensymphony.workflow.InvalidInputException;
@@ -25,9 +29,18 @@ private String screenName;
 private String errorMessage; 
 private String cssname;
 private String jsname;
+private String panelFieldsWhereClause;
 
 
  
+
+public String getPanelFieldsWhereClause() {
+	return panelFieldsWhereClause;
+}
+
+public void setPanelFieldsWhereClause(String panelFieldsWhereClause) {
+	this.panelFieldsWhereClause = panelFieldsWhereClause;
+}
 
 public String getCssname() {
 	return cssname;
@@ -157,6 +170,7 @@ public void setPassword(String password) {
 		 // setLeftPanel(leftPanel);
 		// setTopPanel(topPanel);
 		// setBottomPanel(bottomPanel);
+		 
 		 
 		if(templateName.equalsIgnoreCase("")){
 			setErrorMessage("The template was not found for this page!");
