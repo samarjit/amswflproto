@@ -23,12 +23,12 @@ public class RetreiveData {
 	
 	
 	
-	public void doRetrieveData() throws Exception{
+	public String doRetrieveData(String whereClause) throws Exception{
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
 		String scrName="frmRequest";
 		List <String> lstPanelName = cd.findPanelByScrname(scrName);
-		HashMap<String, String> hmWhere = Utility.extractWhereClause( "empid!0~#empname!sam samanta"/*String whereStringOfPanel, String panelName */);
+		HashMap<String, String> hmWhere = Utility.extractWhereClause( whereClause/*String whereStringOfPanel, String panelName */);
 		String html = ""; //outer
 		String htmlTemp = "";
 		CachedRowSet crs = null;
@@ -105,7 +105,7 @@ public class RetreiveData {
 			
 		}
 		
-		log(html);
+		return html;
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class RetreiveData {
 	public static void main(String[] args) throws Exception{
 		
 		RetreiveData rd = new RetreiveData();
-		rd.doRetrieveData();
+		rd.doRetrieveData("empid!0~#empname!sam samanta");
 	} 
 	
 	/**
@@ -146,6 +146,7 @@ public class RetreiveData {
 			splWhereClause =" ";
 		}
 		//process where clause
+		System.out.println("hmWherePanel"+hmWherePanel);
 		String strWhereQuery  = cd.createWhereClause(joiner,scrname,panelName,hmWherePanel,true);
 		System.out.println("strWhereQuery="+strWhereQuery+"table name:"+tableName);
 		
