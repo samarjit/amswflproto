@@ -121,6 +121,7 @@ public class Createhtml {
 			}
 			ncol ="0";
 			nrow="0";
+			htable.setTableId(panelName);
 			
 			while(crs.next()){
 				
@@ -196,7 +197,7 @@ return (String)htable.toString();
 	public String getJshtml(String screenName) {
 		 String jsStr="";
 		 String SQL = 
-				"select jsname,cssname from screen_panel where SORTORDER =1  and scr_name='frmRequestList'";
+				"select jsname,cssname from screen_panel where SORTORDER =1  and scr_name='"+screenName+"'";
 
 		 DBConnector db = new DBConnector();
 		 try {
