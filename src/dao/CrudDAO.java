@@ -180,7 +180,7 @@ public class CrudDAO {
             	"select dbcol,datatype from panel_fields where  scr_name='"+scrname+"' and " +
             			"panel_name='"+panelName+"' " +
             			"and UPPER(fname)=UPPER('"+fname+"')";
-        //	log("createWhereClause:"+SQL);
+        	log("createWhereClause:"+SQL);
         	CachedRowSet crs = null;
 			try {
 				crs = db.executeQuery(SQL);
