@@ -8,6 +8,7 @@ public class HTable {
 	private int row;
 	private int col;
 	private ArrayList<ArrayList<String>> tdata;
+	private String panelName;
 
 	public HTable(int row, int col) {
 		
@@ -43,8 +44,17 @@ public class HTable {
 			}
 			tstring +="</TR>\n";
 		}
-		tstring ="<TABLE border=1>"+tstring +"</TABLE>";;
+		if(panelName!=null && !("".equals(panelName))){
+			tstring ="<TABLE border=1 id="+ panelName +">"+tstring +"</TABLE>";
+		}
+		else{
+			tstring ="<TABLE border=1>"+tstring +"</TABLE>";
+		}
 		return tstring;
+	}
+	
+	public void setTableId(String panelName) {
+		this.panelName = panelName;		
 	}
 
 
