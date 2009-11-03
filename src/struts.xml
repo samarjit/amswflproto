@@ -40,7 +40,13 @@
 				<param name="inputName">inputStream</param>
 			</result>
 		</action>
-
+	
+		<action name="retreivedetails" class="search.RetreiveDetails">
+			<result type="stream">
+				<param name="contentType">text/html</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
 
 	</package>
 
