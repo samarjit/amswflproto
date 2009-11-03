@@ -8,20 +8,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 <script language="JavaScript" src="js/commonjs.js"></script>
+<s:property value="jsname" escape="false"/>
+<s:url var="url" value="/retreivedetails.action" />
+
 <script language="javascript" >
-function sendReq(){
-	sendAjaxGet(null,mycall);
-}
-function mycall(p){
-	alert("Got from ajax:"+p);
-}
+var urlpart='<s:property value="%{#url}"/>';
+var screenName= '<s:property value="%{#parameters.screenName}"/>';
+var whereClause= '<s:property value="%{#parameters.panelFieldsWhereClause}"/>';
 </script>
+
 </head>
-<body>
+<body onload="populate()">
 The following part is filled using template and DB
 <table> 
 <tr>
 <td>
+<div id=panelsdiv > 
 <s:property value="dataPanel" escape="false"/>
  Using Iterator
  <s:iterator  value="extraFields" >
@@ -30,14 +32,13 @@ The following part is filled using template and DB
  <s:property value="key"/> <s:property value="value" escape="false"/>
  </s:if>
  </s:iterator>
+ </div>
 </td>
 
 <td> <s:property value="extraFields.buttonPanel" escape="false"/>
 &nbsp;
 </td>
 </tr>
-
-
 </table>
 
 Extra fields:
@@ -65,6 +66,8 @@ LinkedHashMap hm =(LinkedHashMap)( request.getAttribute("extraFields"));
 </tr>
 </table>
 
+<div id=searchdiv >
+</div>
  
 
 </body>

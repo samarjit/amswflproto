@@ -11,6 +11,7 @@
 </head>
 <script language="JavaScript" src="js/commonjs.js"></script>
 <s:property value="jsname" escape="false"/>
+
 <s:url var="url" value="/searchlist.action" />
 <script language="javascript" >
 var urlpart='<s:property value="%{#url}"/>';
@@ -19,6 +20,7 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 <body>
 template 2
  <s:property value="screenName"/> 
+ 
 <table> 
 <tr>
 <td>
@@ -36,11 +38,20 @@ template 2
 &nbsp;
 </td>
 </tr>
-
-
 </table>
 
-<input type="button" onclick="searchz()" value="send ajax" />
+
+<form action="template1.action" >
+<select name="screenName" >
+<option >frmRequest</option>
+<option >frmRequestList</option> 
+</select>
+<input type="hidden" id="panelFieldsWhereClause" name="panelFieldsWhereClause" value="">
+<input type="submit" value="view" onclick="makeWhereClause()" />
+</form>
+
+
+<input type="button" onclick="search()" value="send ajax" />
 <div id="searchdiv"></div>
 </body>
 </html>
