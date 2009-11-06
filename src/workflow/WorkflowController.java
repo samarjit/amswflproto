@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -162,7 +163,11 @@ public class WorkflowController extends HttpServlet {
 		}
 		System.out.println("url:"+url); 
 		if("".equals(url))url =response.encodeURL("/wflsubmit.jsp"); 
-		getServletConfig().getServletContext().getRequestDispatcher(url).forward(request,response);
+		///getServletConfig().getServletContext().getRequestDispatcher(url);
+		 
+		url = request.getContextPath() + "/"+ url;
+		response.sendRedirect(url) ;
+		
 	}
 
 	/**
