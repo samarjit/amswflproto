@@ -1,3 +1,5 @@
+
+
 function search(){
 	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;
 	if(document.getElementById("sempid"))
@@ -31,36 +33,60 @@ document.onclick = function(e){
 	cleanUp();
 
 	if (!e)
-	{
-		var e=window.event;
-	}
+	  {
+	  var e=window.event;
+	  }
 	if (e.target)
-	{
-		targ=e.target;
-	}
+	  {
+	  targ=e.target;
+	  }
 	else if (e.srcElement)
-	{
-		targ=e.srcElement;
-	}
+	  {
+	  targ=e.srcElement;
+	  }
 	if (targ.nodeType==3) // defeat Safari bug
-	{
-		targ = targ.parentNode;
-	}
+	  {
+	  targ = targ.parentNode;
+	  }
 	var tname;
 	tname=targ.tagName;
 	var obj  = targ;
 	if(obj.tagName)
-		while( obj  != null && obj.tagName != "TR" && obj.tagName != "DIV"   ){
-			obj = obj.parentElement;
-		}
+	while( obj  != null && obj.tagName != "TR" && obj.tagName != "BODY"   ){
+	obj = obj.parentNode;
+	}
+	var flag = false;
+	var objtest = obj;
+	while( objtest  != null && objtest.tagName != "BODY"   ){
+	if(objtest.id == "searchdiv")flag=true;
+	objtest = objtest.parentNode;
 
-	if(obj != null && (obj.tagName == "tr" || obj.tagName == "TR" ) && obj.childNodes[0].tagName != "TH"  ){
-		selectedIdx  = obj.rowIndex;
-		obj.style.backgroundColor= "#a0b0a0";
 	}
 
-}
+	if(obj != null && (obj.tagName == "tr" || obj.tagName == "TR" )  && flag ){
+	 /*if(!(jQuery(obj).find("th").is("th")) ) {
+	  selectedIdx  = obj.rowIndex;
+	  obj.style.backgroundColor= "#a0b0a0";
+	  alert("inside jquery");
+	  }
+	 */
 
+	/*prototype 
+	var nodes = $A(obj.getElementsByTagName("TH"));
+
+			nodes.each(function(node){
+					alert(node.nodeName + ': ' + node.innerHTML);
+				});
+	*/
+	var arTH = obj.getElementsByTagName("TH");
+	 if(arTH.length == 0 ){
+		 selectedIdx  = obj.rowIndex;
+	  obj.style.backgroundColor= "#a0b0a0";
+	 }
+
+	}
+
+	}
 
 //create url with where clause
 function makeWhereClause(){
@@ -87,3 +113,5 @@ function makeWhereClause(){
 	//alert(whereClause);
 	
 }
+
+
