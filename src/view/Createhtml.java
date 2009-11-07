@@ -194,8 +194,12 @@ return (String)htable.toString();
 
 	}
 
-	public String getJshtml(String screenName) {
+	public String getJsCsshtml(String screenName) {
 		 String jsStr="";
+		 String cssStr = "";
+		 String[] arjsStr = {};
+		 String[] arcssStr = {};
+		 String htmlStr = "";
 		 String SQL = 
 				"select jsname,cssname from screen_panel where SORTORDER =1  and scr_name='"+screenName+"'";
 
@@ -203,15 +207,27 @@ return (String)htable.toString();
 		 try {
 			CachedRowSet crs = db.executeQuery(SQL);
 			while(crs.next()){
-				jsStr = "<script language=\"JavaScript\" src=\"js/"+crs.getString("jsname")+"\"></script>";
-				//css TODO
+				jsStr = crs.getString("jsname");
+				cssStr = crs.getString("cssname");
 			}
+			if(jsStr!=null && !"".equals(jsStr))
+			arjsStr = jsStr.split(",");
+			
+			if(cssStr != null && !"".equals(cssStr))
+			arcssStr = cssStr.split(",");
+			for(String s :arjsStr){
+				htmlStr +=	"<script language=\"JavaScript\" src=\"js/"+s+"\"></script>\n";
+			}
+			for(String s :arcssStr){
+				htmlStr +=  "<LINK href=\"css/"+s+"\"  rel=\"stylesheet\" type=\"text/css\">\n";
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		 
 		 
-		return jsStr;
+		return htmlStr;
 	}
 
 }

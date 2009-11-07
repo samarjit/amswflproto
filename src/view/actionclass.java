@@ -155,7 +155,7 @@ public void setPassword(String password) {
 		 String templateName;
 		 Createhtml htmlc = new Createhtml();
 		 
-		 setJsname(htmlc.getJshtml(screenName));
+		 setJsname(htmlc.getJsCsshtml(screenName));
 		 //setDataPanel(htmlc.makehtml("panelFields"));
 		 //setButtonPanel(htmlc.makehtml("buttonPanel"));
 		 List<String> lstPanels =  htmlc.getPanels(screenName);
