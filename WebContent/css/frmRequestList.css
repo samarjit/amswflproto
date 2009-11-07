@@ -1,0 +1,22 @@
+ #searchdiv TABLE{
+  cursor:pointer;
+  background-color:#E8D59B;
+  border-collapse:collapse;
+  
+ } 
+ 
+ #searchdiv TR{
+ border-collapse:collapse;
+ }
+#searchdiv TD{
+  cursor:pointer;
+  border-collapse:collapse;
+  border:1px solid #D88147;
+   
+ } 
+ #searchdiv TH{
+  cursor:pointer;
+  border-collapse:collapse;
+  border:1px solid #D88147;
+   
+ } 
