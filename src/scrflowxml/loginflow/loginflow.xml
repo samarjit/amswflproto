@@ -4,18 +4,55 @@
   xmlns="urn:jbpm.org:jpdl-3.2"
   name="simple">
    <start-state name="start">
-      <transition name="to_state" to="first">
+      	<description>
+			/sendmail.jsp
+		</description>
+		<transition name="to_state" to="first">
          <action name="action" class="com.sample.action.MessageActionHandler">
             <message>Going to the first state!</message>
          </action>
       </transition>
+		<event type="after-signal">
+			<action class="" name="sam"></action>
+		</event>
    </start-state>
    <state name="first">
-      <transition name="to_end" to="end">
-         <action name="action" class="com.sample.action.MessageActionHandler">
-            <message>About to finish!</message>
-         </action>
-      </transition>
+      <description>
+			/login.jsp
+		</description>
+		<transition to="decision1"></transition>
+		<transition to="fork1" name="to fork1"></transition>
    </state>
+
+	<node name="node1">
+		<transition to="join1"></transition>
+	</node>
+
+	<join name="join1">
+		<transition to="end"></transition>
+	</join>
+
+	<decision name="decision1" expression="some expression">
+		<event type=""></event>
+		<transition to="node1" name="to node1"></transition>
+		<transition to="task-node1" name="to task-node1">
+			<condition expression=""></condition>
+		</transition>
+	</decision>
+
+	<task-node name="task-node1">
+		<task name="sometask">
+			<description>
+				new task
+			</description>
+			<assignment class=""></assignment>
+		</task>
+		<transition to="join1"></transition>
+	</task-node>
+
+	<fork name="fork1">
+		<transition to="task-node1"></transition>
+		<transition to="node1" name="to node1"></transition>
+	</fork>
    <end-state name="end"></end-state>
 </process-definition>

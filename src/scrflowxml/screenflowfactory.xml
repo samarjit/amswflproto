@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <screenflows>
-	<screenflow name="loginflow" resource="resource" file="loginflow.xml" />
+	<screenflow key="loginflow" value="/scrflowxml/loginflow/loginflow.xml" >hello</screenflow>
 </screenflows>
