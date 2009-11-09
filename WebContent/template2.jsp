@@ -47,7 +47,8 @@ template 2
 <option >frmRequestList</option> 
 </select>
 <input type="hidden" id="panelFieldsWhereClause" name="panelFieldsWhereClause" value="">
-<input type="submit" value="view" onclick="makeWhereClause()" />
+<input type="submit" value="view" onclick="return makeWhereClause()" />
+<input type="submit" value="Create Request" onclick="clearWhereClause()"/>
 </form>
 
 
