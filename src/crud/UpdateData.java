@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
 
+import org.json.JSONException;
+
 import util.Utility;
 import dao.CrudDAO;
 
@@ -52,7 +54,13 @@ public class UpdateData {
 		String joiner = " WHERE ";
 		CrudDAO cd = new CrudDAO();
 	 
-		HashMap updateMap = Utility.extractKeyValPair("empid!0~#empname!sam samanta");
+		HashMap updateMap=null;
+		try {
+			updateMap = Utility.extractKeyValPair("empid!0~#empname!sam samanta");
+		} catch (JSONException e) {
+			System.out.println("Failed to extract update key val pair");
+			e.printStackTrace();
+		}
 		String qryPart1 = cd.createUpdateQueryPart1(metadata,scrname,panelName,updateMap );
 		String tableName =  cd.findTableByPanels(scrname,panelName);
 		String splWhereClause = cd.findSplWhereClsOfPanels(scrname,panelName);
