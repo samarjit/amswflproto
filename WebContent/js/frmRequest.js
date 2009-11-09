@@ -1,11 +1,19 @@
 function populate()
 {
 	alert("This alert box was called with the onload event");	
-	var url=urlpart+"?panelName=searchPanel&screenName="+screenName;	
-	url=url+ whereClause;	
-	alert("In message" + whereClause);
-	prompt("url",url);	
-	sendAjaxGet(url, requestCallBack);
+
+	if((!(whereClause == ""))){
+		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
+		url=url+ whereClause;		
+		alert("In message" + whereClause);
+		//prompt("url",url);	
+		sendAjaxGet(url, requestCallBack);
+	}	
+	//alert("In populate");
+}
+
+function clearWhereClause(){
+	document.getElementById("panelFieldsWhereClause").Value = "";
 }
 
 function requestCallBack(p){
@@ -14,6 +22,8 @@ function requestCallBack(p){
 	document.getElementById("searchdiv").innerHTML = p;	
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 	//alert(panelsTable.length);
+
+
 	detailTable    = document.getElementById("searchdiv").getElementsByTagName("table");
 
 	for ( var i=0; i<detailTable.length ; i++)
@@ -52,3 +62,83 @@ function requestCallBack(p){
 	}
 
 }
+
+function insertData() {
+	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+}
+
+
+function reqSubmit() {
+	alert("in submit ");
+	prepareInsertData();
+}
+
+function reqSave() {
+	//alert("in save ");	
+	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;		
+	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
+	//prompt("url",url);	
+	url = url+ "&insertKeyValue="+prepareInsertData();
+	//prompt("url",url);
+	//add key:vlaue to url
+	sendAjaxGet(url, saveCallBack);
+}
+
+function saveCallBack() {
+	//show success message 
+	prompt("Successfully saved your request! ");
+}
+
+
+function KeyValue(a,b) {
+	this.key=a;
+	this.value=b;
+}
+
+function panelClass(a,b) {
+	this.name = a;
+	this.valuesar = b;
+}
+
+function replacer(key, value) {
+	if (typeof value === 'number' && !isFinite(value)) {
+		return String(value);
+	}
+	return value;
+}
+
+
+function prepareInsertData() {
+
+	//alert("in prepare");
+	//var array = {"panelFields1":{"empid":"9002","empname":"tutu","bdate":"12-10-2009"},"panelFields":{"empid":"9001","empname":"samarjit","bdate":"12-10-2009"}};
+	var dataTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+	var pclass = new Array();
+	
+
+		//alert(dataTable.length);		
+		for (var i=0; i<dataTable.length; i++) {
+				
+			var query = "#panelsdiv #" + dataTable[i].id + " input";
+			var requestar = new Array();
+			//alert(query);
+			var elem = 	jQuery(query); 
+			var j = 0;
+			jQuery.each(elem, function(index, item) {	
+				//alert(j);
+				requestar[j] = new KeyValue(item.id, item.value);				
+				j++;						
+			});
+			
+			pclass[i] = new panelClass(dataTable[i].id,requestar);					
+		}	
+		var k = new Object();
+		k.json = pclass
+		var myJSONText = JSON.stringify(k, replacer,"");
+		//alert(myJSONText );	
+		return myJSONText;			
+}
+
+
+
+
