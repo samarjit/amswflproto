@@ -31,8 +31,7 @@ public class RetreiveDetails extends ActionSupport implements ServletRequestAwar
     public HttpServletRequest getServletRequest() {
 		return servletRequest;
 	}
-
-	 
+ 
 
 	public String execute() throws Exception {
     	
@@ -49,16 +48,18 @@ public class RetreiveDetails extends ActionSupport implements ServletRequestAwar
     	//panelFields1WhereClause = request1.getParameter("panelFields1WhereClause");
     	panelFields1WhereClause = request1.getParameter("amp;panelFields1WhereClause");
     	
-    	System.out.println(panelFields1WhereClause);	
-    	
-    	String resultHtml  = retrive.doRetrieveData(panelFields1WhereClause);
-    	
-    	
+    	System.out.println(panelFields1WhereClause);
+    	String resultHtml = "No Data found";
+    	if(panelFields1WhereClause != null || (!"".equals(panelFields1WhereClause)))
+    		resultHtml  = retrive.doRetrieveData(panelFields1WhereClause);
+    	    	
         System.out.println(panelFields1WhereClause);
        // String resXML  = getResultXML (qry,metadata); 
         inputStream = new StringBufferInputStream(resultHtml);
     	//inputStream = new StringBufferInputStream("in view details");
         System.out.println("in view details");
+        
+        //clearing the where clause after use
         return SUCCESS;
     }
 	
@@ -75,6 +76,5 @@ public class RetreiveDetails extends ActionSupport implements ServletRequestAwar
 	}
 
 
-	 
 
 }
