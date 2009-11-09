@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
 
+import org.json.JSONException;
+
 import util.Utility;
 import dao.CrudDAO;
 
@@ -22,15 +24,15 @@ public class InsertData {
 	 */
 	public static void main(String[] args) {
 		InsertData dd = new InsertData ();
-		dd.doInsert();
+		dd.doInsert("frmRequest", "empid!0~#empname!sam samanta");
 
 	}
-	public void doInsert(){
+	public String doInsert(String screenName, String insertClause){
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
-		String scrName="frmRequest";
+		String scrName=screenName;
 		List <String> lstPanelName = cd.findPanelByScrname(scrName);
-		HashMap<String, String> hmWhere = Utility.extractWhereClause( "empid!0~#empname!sam samanta"/*String whereStringOfPanel, String panelName */);
+		//HashMap<String, String> hmWhere = Utility.extractWhereClause( insertClause/*String whereStringOfPanel, String panelName */);
 		String html = ""; //outer
 		String htmlTemp = "";
 		CachedRowSet crs = null;
@@ -39,42 +41,53 @@ public class InsertData {
 		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
-			log("******** calling creteDeleteQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
+			log("******** calling creteInsertQuery panel name#"+panelName + "insertClause" + insertClause);
 		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
 			metadata = new HashMap();
 			//column metadata should get populated here
-			String sg = createInsertQuery(metadata, scrName,	panelName, hmWhere);
-			log("Insert query:" + sg);
-			
+			String sg = createInsertQuery(metadata, scrName, panelName,insertClause );
+			if(sg != null && !("".equals(sg))){
+				try {
+					cd.executeInsertQuery(sg);
+				} catch (Exception e) {
+					System.out.println("Failed in insert");
+					e.printStackTrace();
+				}
+				log("Insert query:" + sg);
+			}						
 		}
+		
+		return html;
 	}
 	
-	public String createInsertQuery(HashMap metadata,String scrname,String panelName, HashMap<String,String> hmWherePanel) {
-		String updateQuery = "";
-		String joiner = " WHERE ";
+	public String createInsertQuery(HashMap metadata,String scrname,String panelName, String insertClause) {
+		String insertQry = "";
+		
 		CrudDAO cd = new CrudDAO();
 	 
-		HashMap insertMap = Utility.extractKeyValPair("empid!0~#empname!sam samanta");
+		HashMap insertMap = null;
+		try {
+			HashMap<String, HashMap<String,String>> keyvvaltemp = Utility.extractKeyValPair(insertClause);
+			if(keyvvaltemp.containsKey(panelName))
+				insertMap = keyvvaltemp.get(panelName);
+			else
+				return "";	
+		} catch (JSONException e) {
+			System.out.println("Failed to extract insertClause");
+			e.printStackTrace();
+		}
+		
 		HashMap qryPart1 = cd.createInsertQueryPart1(metadata,scrname,panelName,insertMap );
 		String tableName =  cd.findTableByPanels(scrname,panelName);
 		String splWhereClause = cd.findSplWhereClsOfPanels(scrname,panelName);
-		  
-		
-		if(splWhereClause != null && ! "".equals(splWhereClause) ){
-			splWhereClause += joiner + splWhereClause+" ";
-			joiner =" AND ";
-		}else{
-			splWhereClause =" ";
-		}
-		//process where clause
-		
+		  		
 		System.out.println("table name:"+tableName);
 		
 		if(tableName!= null && tableName.length() >0 && qryPart1 !=null && qryPart1.size() > 0  && qryPart1.get("valuestr") != null){
-			updateQuery ="INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")"; 
+			insertQry ="INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")"; 
 		}else {
 			log("Incomplete query was:"+"INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")");
 		}
-		return updateQuery;
+		return insertQry;
 	}
 }
