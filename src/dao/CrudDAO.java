@@ -239,6 +239,19 @@ public class CrudDAO {
 		}
 		return crs;
 	}
+	
+	
+	public void  executeInsertQuery(String sg) throws Exception {
+		DBConnector db = new DBConnector();
+		try {
+			db.executeQuery(sg);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}		
+	}
+	
 
 	public String findPreDefQuery(String screenName, String panelName) {
 		String preDefQuery = "";
@@ -313,7 +326,7 @@ public class CrudDAO {
 	}
 
 	public HashMap createInsertQueryPart1(HashMap metadata, String scrname,
-		String panelName,HashMap updateClause) {
+		String panelName,HashMap insertClause) {
 			DBConnector db = new DBConnector();
 			String strQuery="";
 			HashMap inesrtqryPart = new HashMap();
@@ -322,10 +335,10 @@ public class CrudDAO {
 			String colquery ="";
 			//metadata = new HashMap();
 			CachedRowSet crs = null;
-			log(updateClause.toString());
+			log(insertClause.toString());
 			String SQL2 = 
 				"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
-		log("createUpdateQueryPart1:"+SQL2); 
+		log("createInsertQueryPart1:"+SQL2); 
 			 try {
 					 crs = db.executeQuery(SQL2);
 				
@@ -342,10 +355,10 @@ public class CrudDAO {
 						colquery = crs.getString("strquery");
 						
 						String fname= crs.getString("fname");
-						if(updateClause.get(fname.toLowerCase())!= null)
+						if(insertClause.get(fname.toLowerCase())!= null)
 							{
 							dbcolStr +=crs.getString("dbcol")+",";
-							valueStr += "'"+updateClause.get(fname.toLowerCase())+"' ,";
+							valueStr += "'"+insertClause.get(fname.toLowerCase())+"' ,";
 							metadata.put(crs.getString("fname"), ls) ;
 							}
 						 
