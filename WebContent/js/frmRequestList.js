@@ -10,7 +10,7 @@ function search(){
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){
-	//alert("Got from ajax:"+p);
+	alert("Got from ajax:"+p);
 	document.getElementById("searchdiv").innerHTML = p;
 }
 
@@ -92,26 +92,36 @@ document.onclick = function(e){
 function makeWhereClause(){
 	//alert("in make url");
 	//There will be only one table in search screen 'search div'
+	
 	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
-	
+
 	whereClause = "&panelFields1WhereClause=";
-		
-	//poplate wher clause url
-	for (i = 0; i <listTable.rows[0].cells.length ; i++ )
-	{
-		//alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
-		if(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]  == "Y") {
-			name = listTable.rows[0].cells[i].innerText.split(',')[2];	 
-			value = listTable.rows[selectedIdx].cells[i].innerText;
-			whereClause = whereClause + name + "!" + value + "~#";
+	if(listTable != null && selectedIdx != -1){
+		//poplate wher clause url
+		for (i = 0; i <listTable.rows[0].cells.length ; i++ )
+		{
+			//alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
+			if(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]  == "Y") {
+				name = listTable.rows[0].cells[i].innerText.split(',')[2];	 
+				value = listTable.rows[selectedIdx].cells[i].innerText;
+				whereClause = whereClause + name + "!" + value + "~#";
+			}
 		}
+		whereClause = whereClause.replace(/(~#)$/, '');
+
+		document.getElementById("panelFieldsWhereClause").value=whereClause;
 	}
-	whereClause = whereClause.replace(/(~#)$/, '');
-	
-	document.getElementById("panelFieldsWhereClause").value=whereClause;
+	else {
+		return false;
+	}
 	
 	//alert(whereClause);
-	
+
+}
+
+//create url with where clause
+function clearWhereClause(){
+	document.getElementById("panelFieldsWhereClause").value="";
 }
 
 
