@@ -9,10 +9,12 @@
 <title>Insert title here</title>
 <script language="JavaScript" src="js/commonjs.js"></script>
 <s:property value="jsname" escape="false"/>
-<s:url var="url" value="/retreivedetails.action" />
+<s:url var="retriveurl" value="/retreivedetails.action" />
+<s:url var="inserturl" value="/insertdata.action" />
 
 <script language="javascript" >
-var urlpart='<s:property value="%{#url}"/>';
+var retriveurlpart='<s:property value="%{#retriveurl}"/>';
+var inserturlpart='<s:property value="%{#inserturl}"/>';
 var screenName= '<s:property value="%{#parameters.screenName}"/>';
 var whereClause= '<s:property value="%{#parameters.panelFieldsWhereClause}"/>';
 </script>
