@@ -13,13 +13,10 @@
          </action>
       </transition>
 		<event type="after-signal">
-			<action class="" name="sam"></action>
+			<action name="sam" class="businesslogic.LoginBL"></action>
 		</event>
    </start-state>
    <state name="first">
-      <description>
-			/login.jsp
-		</description>
 		<transition to="decision1"></transition>
 		<transition to="fork1" name="to fork1"></transition>
    </state>
@@ -29,6 +26,9 @@
 	</node>
 
 	<join name="join1">
+	<description>
+			/login.jsp
+		</description>
 		<transition to="end"></transition>
 	</join>
 

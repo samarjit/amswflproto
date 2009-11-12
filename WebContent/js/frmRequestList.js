@@ -6,7 +6,7 @@ function search(){
 		url=url+'&sempid='+document.getElementById("sempid").value;
 	if(document.getElementById("sempname"))
 		url=url+'&sempname='+document.getElementById("sempname").value;
-	alert(url);	
+		
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){

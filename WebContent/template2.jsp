@@ -1,13 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>  
+<%@ taglib uri="/struts-dojo-tags" prefix="sx" %>
 <%@ page import="java.util.Iterator,java.util.LinkedHashMap" %>  
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>New Page</title>
+<style>
+@import "/css/button.css";
+</style>
 </head>
 <script language="JavaScript" src="js/commonjs.js"></script>
 <s:property value="jsname" escape="false"/>
@@ -28,7 +32,7 @@ template 2
  Using Iterator
  <s:iterator  value="extraFields" >
  <s:set var="som" value="key" />
- <s:if test="#som != 'buttonPanel'">  
+ <s:if test="#som != 'buttonPanel' && #som != 'searchPanel'">  
  <div id='<s:property value="key"/>'> <s:property value="key"/><s:property value="value" escape="false"/></div>
  </s:if>
  </s:iterator>
@@ -54,5 +58,8 @@ template 2
 
 <input type="button" onclick="search()" value="send ajax" />
 <div id="searchdiv"></div>
+ 
+<sx:datetimepicker name="extraFields.buttonPanel" label="Order Date" />
+
 </body>
 </html>

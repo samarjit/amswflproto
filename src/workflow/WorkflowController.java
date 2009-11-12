@@ -31,11 +31,10 @@ import dto.UserDTO;
  * @version: 1.0
  */
 public class WorkflowController extends HttpServlet {
-	 
-	
-	private static final long serialVersionUID = 1L;
-       
-    /**
+ 
+	private static final long serialVersionUID = -6869373705019616991L;
+
+	/**
      * @see HttpServlet#HttpServlet()
      */
     public WorkflowController() {

@@ -18,6 +18,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import businesslogic.BaseBL;
+
 public class ScreenFlow {
 	boolean initialized = false;
 	public ScreenFlow() {
@@ -26,7 +28,7 @@ public class ScreenFlow {
 	}
 	private static HashMap<String,String> workflowlocationcache = null; 
 	
-	public Document parserXML(String file) throws SAXException, IOException, ParserConfigurationException
+	private Document parserXML(String file) throws SAXException, IOException, ParserConfigurationException
 	{
 		return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 	}
@@ -34,7 +36,7 @@ public class ScreenFlow {
 private void init(){
 	if(initialized)return;
 	initialized = true;
-	URL  st =  ClassLoader.getSystemResource("scrflowxml/screenflowfactory.xml");
+	URL  st =  ScreenFlow.class.getResource("/scrflowxml/screenflowfactory.xml");
 	Document doc = null;
 	workflowlocationcache = new HashMap<String, String>();
 	try {
@@ -232,10 +234,28 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 		if(url == null) throw new IOException("File not found");
 		Document doc = parserXML(url.getFile());
 		XPath xpath = XPathFactory.newInstance().newXPath();
-		NodeList nlstate = (NodeList) xpath.evaluate("/process-definition/state[@name=\""+currentAction+"\"]/description", doc, XPathConstants.NODESET);
-		if(nlstate != null ){
+		NodeList nodelist = (NodeList) xpath.evaluate("/process-definition/start-state[@name=\""+currentAction+"\"]/description", doc, XPathConstants.NODESET);
+		
+		if(nodelist == null || nodelist.getLength() <1 ){
+			nodelist = (NodeList) xpath.evaluate("/process-definition/state[@name=\""+currentAction+"\"]/description", doc, XPathConstants.NODESET);
+		}
+		if(nodelist == null || nodelist.getLength() ==0){
+			nodelist = (NodeList) xpath.evaluate("/process-definition/task-node[@name=\""+currentAction+"\"]/description", doc, XPathConstants.NODESET);
+		} 
+		if(nodelist == null || nodelist.getLength() <1){
+			nodelist = (NodeList) xpath.evaluate("/process-definition/fork[@name=\""+currentAction+"\"]/description", doc, XPathConstants.NODESET);
+		} 
+		if(nodelist == null || nodelist.getLength() <1){
+			nodelist = (NodeList) xpath.evaluate("/process-definition/decision[@name=\""+currentAction+"\"]/description", doc, XPathConstants.NODESET);
+		} 
+		if(nodelist == null || nodelist.getLength() <1){
+			nodelist = (NodeList) xpath.evaluate("/process-definition/join[@name=\""+currentAction+"\"]/description", doc, XPathConstants.NODESET);
+		}
+		
+		if(nodelist != null ){
 			found = true;
-			Node descnode = nlstate.item(0);
+			
+			Node descnode = nodelist.item(0);
 			if(descnode != null){
 				screenName = descnode.getTextContent();
 				screenName = screenName.trim();
@@ -256,13 +276,67 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 	
 	return screenName;
 }
+	
+
+	public String getBusinessLogic(String flowName, String currentAction) {
+		String workflowFile = 	ScreenFlow.workflowlocationcache.get(flowName);
+		String transitTo ="";
+		String businessLogic = "";
+		boolean  found = false;
+		try {
+			URL url = ScreenFlow.class.getResource(workflowFile);
+			if(url == null) throw new IOException("File not found");
+			Document doc = parserXML(url.getFile());
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			NodeList nodelist = (NodeList) xpath.evaluate("/process-definition/start-state[@name=\""+currentAction+"\"]/event/action", doc, XPathConstants.NODESET);
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/task-node[@name=\""+currentAction+"\"]/event/action", doc, XPathConstants.NODESET);
+			}
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/fork[@name=\""+currentAction+"\"]/event/action", doc, XPathConstants.NODESET);
+			}
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/decision[@name=\""+currentAction+"\"]/event/action", doc, XPathConstants.NODESET);
+			}
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/join[@name=\""+currentAction+"\"]/event/action", doc, XPathConstants.NODESET);
+			}
+
+			if(nodelist != null ){
+				found = true;
+				Element descnode = (Element) nodelist.item(0);
+				if(descnode != null){
+					businessLogic =  descnode.getAttribute("class");
+					businessLogic = businessLogic.trim();
+				}else{
+					businessLogic = "";	
+				}
+			}
+				
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return businessLogic;
+	}
+	
 	/**
 	 * @param args
+	 * @throws ClassNotFoundException just before class loading
+	 * @throws IllegalAccessException  while class loading
+	 * @throws InstantiationException while class was instanciation
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		ScreenFlow scf = new ScreenFlow();
 		scf.init();
-		System.out.println(scf.getNextActions("loginflow", "start"));
+		System.out.println("NextAction:"+scf.getNextActions("loginflow", "join1"));
+		System.out.println("Current Screen Name:"+scf.getActionScreenName("loginflow", "join1"));
+		System.out.println("BusinessLogic:"+scf.getBusinessLogic("loginflow", "start"));
+		String className = scf.getBusinessLogic("loginflow", "start");
+		Class aclass = Class.forName(className);
+		BaseBL basebl = (BaseBL) aclass.newInstance();
+		basebl.processRequest(null);
+		System.out.println();
 	}
 
 }

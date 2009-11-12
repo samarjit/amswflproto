@@ -23,10 +23,15 @@ import dto.UserDTO;
  * Servlet implementation class WorkflowSearch
  */
 public class WorkflowSearch extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7175855967006838476L;
+
 	private void debug(String s){
 		System.out.println(s);
 	}
-	private static final long serialVersionUID = 1L;
+	 
        
     /**
      * @see HttpServlet#HttpServlet()

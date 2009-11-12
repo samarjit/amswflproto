@@ -19,7 +19,7 @@ function sendAjaxPost(strURL,data,callbak){
 	if(strURL == null)
 		strURL="searchlist.action";
 	var rnum = Math.random()*1000;
-	alert(rnum);
+	
 	if(strURL.indexOf("?") >-1)strURL+="&rnum="+rnum;
 	else strURL+="?rnum="+rnum;
 	
@@ -38,7 +38,7 @@ function sendAjaxGet(strURL,callbak){
 	strURL="searchlist.action";
 	 
 	var rnum = Math.random()*1000;
-	alert(rnum);
+	
 	if(strURL.indexOf("?") >-1)strURL+="&rnum="+rnum;
 	else strURL+="?rnum="+rnum;
 	

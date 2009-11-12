@@ -11,6 +11,6 @@
 <br/>
 sending mail
 <jsp:include page="/pages/actionbutton.jsp"></jsp:include>
-
+<%= request.getParameter("screenName") %>
 </body>
 </html>

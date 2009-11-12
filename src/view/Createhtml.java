@@ -171,7 +171,8 @@ public class Createhtml {
 				if("BUTTON".equalsIgnoreCase(htmlelm)){
 					elmStr = lblname;
 				//	htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, "");
-					elmStr = "<input type=\"button\" name='"+fname+"' id='"+idname+"' value='"+lblname+"'  "+validation+" />";
+				//	elmStr = "<input type=\"button\" name='"+fname+"' id='"+idname+"' value='"+lblname+"'  "+validation+" />";
+					elmStr = "<div class=\"clear\" ><a href=\"#\" class=\"button\" name='"+fname+"' id='"+idname+"'    "+validation+" ><SPAN>"+lblname+"</SPAN></a></div>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol), elmStr);
 				}
 			
