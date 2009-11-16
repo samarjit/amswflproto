@@ -1,19 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>  
-<%@ taglib uri="/struts-dojo-tags" prefix="sx" %>
 <%@ page import="java.util.Iterator,java.util.LinkedHashMap" %>  
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<%String ctxstr = request.getContextPath(); %>
 <title>New Page</title>
 <style>
-@import "/css/button.css";
+@import "<%=ctxstr %>/css/button.css";
+ 
 </style>
 </head>
-<script language="JavaScript" src="js/commonjs.js"></script>
+<script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
 <s:property value="jsname" escape="false"/>
 
 <s:url var="url" value="/searchlist.action" />
@@ -22,6 +23,7 @@ var urlpart='<s:property value="%{#url}"/>';
 var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 </script>
 <body>
+<%@ include file="pages/header.jsp" %>
 template 2
  <s:property value="screenName"/> 
  
@@ -45,11 +47,12 @@ template 2
 </table>
 
 
-<form action="template1.action" >
-<select name="screenName" >
+<form action="template1.action" id="formwhere" >
+<%-- select name="screenName" >
 <option >frmRequest</option>
 <option >frmRequestList</option> 
-</select>
+</select --%>
+<input type="hidden" name="screenName" id="screenName" />
 <input type="hidden" id="panelFieldsWhereClause" name="panelFieldsWhereClause" value="">
 <input type="submit" value="view" onclick="return makeWhereClause()" />
 <input type="submit" value="Create Request" onclick="clearWhereClause()"/>
@@ -57,9 +60,9 @@ template 2
 
 
 <input type="button" onclick="search()" value="send ajax" />
+<div class="clear" ><a href="#" class="button" name='search' id='search'    onclick="search();" ><SPAN>Search</SPAN></a></div>
 <div id="searchdiv"></div>
  
-<sx:datetimepicker name="extraFields.buttonPanel" label="Order Date" />
 
 </body>
 </html>

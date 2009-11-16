@@ -17,8 +17,9 @@ import dbconn.DBConnector;
 
 public class RetreiveData {
 	
-	public void log(String s){
-		System.out.println(s);
+	private void debug(int priotiry, String s){
+		if(priotiry > 0)
+			System.out.println("RetreiveData:"+s);
 	}
 	
 	
@@ -32,19 +33,19 @@ public class RetreiveData {
 		String html = ""; //outer
 		String htmlTemp = "";
 		CachedRowSet crs = null;
-		log("lstPanelName:"+lstPanelName);
+		debug(0,"lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
 		
 		//For every panel in the screen create an XML table 
 		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
-			log("******** calling creteRetreiveQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
+			debug(0,"******** calling creteRetreiveQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
 		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
 			metadata = new HashMap();
 			//column metadata should get populated here
 			String sg = createRetrieveQuery(metadata, scrName,	panelName, hmWhere);
-			log("Retrieve query:" + sg);
+			debug(1,"Retrieve query:" + sg);
 			
 			String tableHeader = "No data found";
 			
@@ -70,7 +71,7 @@ public class RetreiveData {
 							String fname = (String) itrmetadata.next();
 							ListAttribute ls = (ListAttribute) metadata
 									.get(fname);
-							log("Fname=" + fname);
+							debug(0,"Fname=" + fname);
 							data = crs.getString(fname);
 
 							if (firstItr) {
@@ -84,7 +85,8 @@ public class RetreiveData {
 							tableHeader += "</tr>";
 							firstItr = false;
 						}
-						htmlTemp += "</tr>";System.out.println(htmlTemp);
+						htmlTemp += "</tr>";
+						debug(0,htmlTemp);
 					} //while crs.next()
 					
 				} catch (Exception e) {
@@ -96,12 +98,15 @@ public class RetreiveData {
 						if(crs!=null)
 						crs.close();
 					} catch (Exception e) {
-						log(e.getMessage());
+						debug(5,e.getMessage());
 						e.printStackTrace();
 					}
 				}
-			} // if sg.length >0
-			html += "<table border=1 id='"+panelName+"'>" + tableHeader + htmlTemp + "</table>\n";
+				html += "<table border=1 id='"+panelName+"'>" + tableHeader + htmlTemp + "</table>\n";
+			}else{// if sg.length >0
+				
+			}
+			
 			
 		}
 		
@@ -146,9 +151,9 @@ public class RetreiveData {
 			splWhereClause =" ";
 		}
 		//process where clause
-		System.out.println("hmWherePanel"+hmWherePanel);
+		debug(0,"hmWherePanel"+hmWherePanel);
 		String strWhereQuery  = cd.createWhereClause(joiner,scrname,panelName,hmWherePanel,true);
-		System.out.println("strWhereQuery="+strWhereQuery+"table name:"+tableName);
+		debug(0,"strWhereQuery="+strWhereQuery+"table name:"+tableName);
 		
 		if(tableName!= null && tableName.length() >0 && strWhereQuery!=null && strWhereQuery.length()>0)
 			if(predefQuery!=null && predefQuery.length() > 0 ){
@@ -157,7 +162,7 @@ public class RetreiveData {
 				retrieveQuery ="SELECT  "+qryPart1 +" FROM "+tableName+splWhereClause+strWhereQuery; 
 			}
 		else {
-			log("Incomplete query was:"+"SELECT  "+qryPart1 +" FROM "+tableName+splWhereClause+strWhereQuery);
+			debug(5,"Incomplete query was:"+"SELECT  "+qryPart1 +" FROM "+tableName+splWhereClause+strWhereQuery);
 		}
 		
 		return retrieveQuery;

@@ -1,21 +1,31 @@
 package workflow;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import businesslogic.BaseBL;
@@ -290,6 +300,9 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			NodeList nodelist = (NodeList) xpath.evaluate("/process-definition/start-state[@name=\""+currentAction+"\"]/event/action", doc, XPathConstants.NODESET);
 			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/state[@name=\""+currentAction+"\"]/event/action", doc, XPathConstants.NODESET);
+			}
+			if(nodelist == null || nodelist.getLength() <1){
 				nodelist = (NodeList) xpath.evaluate("/process-definition/task-node[@name=\""+currentAction+"\"]/event/action", doc, XPathConstants.NODESET);
 			}
 			if(nodelist == null || nodelist.getLength() <1){
@@ -329,14 +342,105 @@ public String getActionScreenName(String scrFlowName,String currentAction){
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		ScreenFlow scf = new ScreenFlow();
 		scf.init();
-		System.out.println("NextAction:"+scf.getNextActions("loginflow", "join1"));
-		System.out.println("Current Screen Name:"+scf.getActionScreenName("loginflow", "join1"));
-		System.out.println("BusinessLogic:"+scf.getBusinessLogic("loginflow", "start"));
+		System.out.println("NextAction:"+scf.getNextActions("loginflow", ""));
+		System.out.println("Current Screen Name:"+scf.getActionScreenName("loginflow", ""));
+		System.out.println("BusinessLogic:"+scf.getBusinessLogic("loginflow", ""));
 		String className = scf.getBusinessLogic("loginflow", "start");
 		Class aclass = Class.forName(className);
 		BaseBL basebl = (BaseBL) aclass.newInstance();
-		basebl.processRequest(null);
+		System.out.println("findScrFlowNode:");
+		scf.populateScrFlowNode ("loginflow", "start");
 		System.out.println();
 	}
+	
+	public ScrFlowNode populateScrFlowNode(String flowName, String currentAction) {
+		String workflowFile = 	ScreenFlow.workflowlocationcache.get(flowName);
+		String transitTo ="";
+		String businessLogic = "";
+		Node node = null;
+		boolean  found = false;
+		ScrFlowNode scrflownode = new ScrFlowNode();
+		try {
+			URL url = ScreenFlow.class.getResource(workflowFile);
+			if(url == null) throw new IOException("File not found");
+			Document doc = parserXML(url.getFile());
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			NodeList nodelist = (NodeList) xpath.evaluate("/process-definition/start-state[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/state[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+			}
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/task-node[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+			}
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/fork[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+			}
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/decision[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+			}
+			if(nodelist == null || nodelist.getLength() <1){
+				nodelist = (NodeList) xpath.evaluate("/process-definition/join[@name=\""+currentAction+"\"]", doc, XPathConstants.NODESET);
+			}
 
+			if(nodelist != null && nodelist.getLength()>0){
+				found = true;
+				Element descnode = (Element) nodelist.item(0);
+				node = nodelist.item(0);
+				scrflownode.setNode(node);
+				// System.out.println( scrflownode.toXMLStr());
+				//listNodes(node," ");
+				if(descnode != null){
+					NodeList innerNodeList = (NodeList) xpath.evaluate("description", node, XPathConstants.NODESET);
+					if(innerNodeList !=null && innerNodeList.getLength() >0){
+						scrflownode.setDescription(trim(innerNodeList.item(0).getTextContent()));
+					}
+					
+					if(node !=null  ){
+						businessLogic =  ((Element)node).getAttribute("expression");
+						scrflownode.setDecisionExpression(businessLogic);
+					}
+					
+					innerNodeList = (NodeList) xpath.evaluate("event/action[@class]", node, XPathConstants.NODESET);
+					if(innerNodeList !=null && innerNodeList.getLength() >0){
+						businessLogic =  ((Element)innerNodeList.item(0)).getAttribute("class");
+						scrflownode.setEventactions(businessLogic);
+						}
+					innerNodeList = (NodeList) xpath.evaluate("event/action[@expression]", node, XPathConstants.NODESET);
+					if(innerNodeList !=null && innerNodeList.getLength() >0){
+						businessLogic =  ((Element)innerNodeList.item(0)).getAttribute("expression");
+						scrflownode.setEventexpression(businessLogic);
+						}
+					innerNodeList = (NodeList) xpath.evaluate("transition", node, XPathConstants.NODESET);
+					if(innerNodeList !=null && innerNodeList.getLength() >0){
+						ArrayList<String> transitionto = new ArrayList<String>();
+						for(int i =0; i<innerNodeList.getLength();i++){
+							Element elm = (Element)innerNodeList.item(i);
+							transitionto.add(elm.getAttribute("to"));
+						}
+						scrflownode.setTransitionto(transitionto);
+					}
+					innerNodeList = (NodeList) xpath.evaluate("handler[@class]", node, XPathConstants.NODESET);
+					if(innerNodeList !=null && innerNodeList.getLength() >0){ 
+						businessLogic =  ((Element)innerNodeList.item(0)).getAttribute("class");
+						scrflownode.setDecisionHandler(businessLogic);
+						}
+					
+				} 
+			}
+				
+			System.out.println(scrflownode);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return scrflownode;
+	}
+
+	private String trim(String textContent) {
+		  if(textContent != null && textContent.length() >0)textContent=textContent.trim();
+		return textContent;
+	}
+	
+	
+	 
+	
 }

@@ -1,15 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
-<%@ taglib uri="/struts-tags" prefix="s"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Login</title>
-<link rel="stylesheet" href="../css/login.css" type="text/css" />
+<%String ctxstr = request.getContextPath(); %>
+<link rel="stylesheet" href="<%=ctxstr %>/css/login.css" type="text/css" />
 <STYLE>
-@import "../css/button.css";
+@import "<%=ctxstr %>/css/button.css";
 </STYLE>
 </head>
 <SCRIPT LANGUAGE="JavaScript">
@@ -20,9 +21,9 @@ document.getElementById("formId0").submit();
 <body>
 
 <br/>
-<FORM METHOD="GET" ACTION="login.action" id="formId0">
-<input type="hidden" name="scrflowname" value="loginflow"/>
-<input type="hidden" name="sceenname" value="login"/> 
+<FORM METHOD="GET" ACTION="${pageContext.servletContext.contextPath}/ScreenFlowControllerServlet" id="formId0">
+<input type="text" name="screenflowname" value="loginflow"/>
+<input type="text" name="currentaction" value="login"/> 
 <div id="itsthetable" style="width:auto"> 
 <TABLE id="login">
 <thead>

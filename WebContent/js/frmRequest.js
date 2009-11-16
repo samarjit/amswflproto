@@ -1,12 +1,12 @@
 function populate()
 {
-	alert("This alert box was called with the onload event");	
+	//alert("This alert box was called with the onload event");	
 
 	if((!(whereClause == ""))){
 		var url=retriveurlpart+"?panelName=searchPanel&screenName="+screenName;	
-		url=url+ whereClause;		
-		alert("In message" + whereClause);
-		//prompt("url",url);	
+		url=url+"&whereClause="+ whereClause;		
+		//alert("In message: whereClause=" + whereClause);
+		// prompt("url",url);	
 		sendAjaxGet(url, requestCallBack);
 	}	
 	//alert("In populate");
@@ -32,12 +32,13 @@ function requestCallBack(p){
 		if (detailTable[i].id == 'buttonPanel')
 			continue;
 		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
-			comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
+			//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
 			//alert(comStr);
-			//alert(detailTable[i].rows[0].cells[k].innerText);
-			//comVal = detailTable[i].rows[1].cells[k].data;	  
-			comVal = detailTable[i].rows[1].cells[k].innerText;	  
+			comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
+			//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
+			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
 			//alert(comVal);				
+			//comVal = detailTable[i].rows[1].cells[k].innerText;	  
 			for(var l = 0; l<panelsTable.length; l++)
 			{
 				//alert(panelsTable[i].id);
@@ -84,9 +85,10 @@ function reqSave() {
 	sendAjaxGet(url, saveCallBack);
 }
 
-function saveCallBack() {
+function saveCallBack(val) {
 	//show success message 
-	prompt("Successfully saved your request! ");
+	if(val < 0)alert("Error while saving! ");
+	else alert("Successfully saved your request! ");
 }
 
 

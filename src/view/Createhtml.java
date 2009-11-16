@@ -2,10 +2,10 @@ package view;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
+
 import dbconn.DBConnector;
 
 
@@ -47,7 +47,7 @@ public class Createhtml {
 	
 	public String getTemplateName(String screenName){
 		String SQL = 
-			"SELECT template_name   FROM  screen_panel where SORTORDER =1 and scr_name='"+screenName+"'";
+			"SELECT template_name   FROM  screen  where   scr_name='"+screenName+"'";
 		//System.out.println(SQL);
 		String templName = "";
 		DBConnector db = new DBConnector();
@@ -172,7 +172,7 @@ public class Createhtml {
 					elmStr = lblname;
 				//	htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, "");
 				//	elmStr = "<input type=\"button\" name='"+fname+"' id='"+idname+"' value='"+lblname+"'  "+validation+" />";
-					elmStr = "<div class=\"clear\" ><a href=\"#\" class=\"button\" name='"+fname+"' id='"+idname+"'    "+validation+" ><SPAN>"+lblname+"</SPAN></a></div>";
+					elmStr = "<div class=\"clear\" "+validation+"><a href=\"#\" class=\"button\" name='"+fname+"' id='"+idname+"'     ><SPAN>"+lblname+"</SPAN></a></div>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol), elmStr);
 				}
 			
@@ -201,8 +201,8 @@ return (String)htable.toString();
 		 String[] arjsStr = {};
 		 String[] arcssStr = {};
 		 String htmlStr = "";
-		 String SQL = 
-				"select jsname,cssname from screen_panel where SORTORDER =1  and scr_name='"+screenName+"'";
+//		 String SQL = "select jsname,cssname from screen_panel where SORTORDER =1  and scr_name='"+screenName+"'";
+		 String SQL = "select jsname,cssname from screen  where   scr_name='"+screenName+"'";
 
 		 DBConnector db = new DBConnector();
 		 try {

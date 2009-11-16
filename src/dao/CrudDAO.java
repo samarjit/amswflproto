@@ -8,18 +8,17 @@ import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
 
-import search.ListAttribute; 
-
+import search.ListAttribute;
 import dbconn.DBConnector;
 
 public class CrudDAO {
-	private void log(String s){
-		System.out.println(s);
+	private void debug(int priority,String s){
+		if(priority > 1)
+		System.out.println("CrudDAO:"+s);
 	}
 	
 	public String findSplWhereClsOfPanels(String screenName,String panelName){
-		String SQL = 
-			"SELECT splwhereclause   FROM  screen_panel where scr_name='"+screenName+"' and panel_name='"+panelName+"' ";
+ 		String SQL = "SELECT splwhereclause   FROM  screen_panel where scr_name='"+screenName+"' and panel_name='"+panelName+"' ";
 		DBConnector db = new DBConnector();
 		String tableNames = "";
 		CachedRowSet crs = null;
@@ -117,7 +116,7 @@ public class CrudDAO {
 		
 		String SQL2 = 
 			"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
-	log("createRetrieveQueryPart1:"+SQL2); 
+			debug(1,"createRetrieveQueryPart1:"+SQL2); 
 		 try {
 				 crs = db.executeQuery(SQL2);
 			
@@ -155,7 +154,7 @@ public class CrudDAO {
 					
 				}
 			}
-			System.out.println(metadata);
+			debug(0,metadata.toString());
 			return searchQuery;
 	}
 
@@ -180,7 +179,7 @@ public class CrudDAO {
             	"select dbcol,datatype from panel_fields where  scr_name='"+scrname+"' and " +
             			"panel_name='"+panelName+"' " +
             			"and UPPER(fname)=UPPER('"+fname+"')";
-        	log("createWhereClause:"+SQL);
+        	debug(1,"createWhereClause:"+SQL);
         	CachedRowSet crs = null;
 			try {
 				crs = db.executeQuery(SQL);
@@ -208,7 +207,7 @@ public class CrudDAO {
 				e.printStackTrace();
 			}
 			 catch (Exception e) {
-				 log(SQL);
+				 debug(5,SQL);
 					e.printStackTrace();
 			}finally{
 					if(crs != null){
@@ -241,15 +240,17 @@ public class CrudDAO {
 	}
 	
 	
-	public void  executeInsertQuery(String sg) throws Exception {
+	public int  executeInsertQuery(String sg) throws Exception {
 		DBConnector db = new DBConnector();
+		int result = 0;
 		try {
-			db.executeQuery(sg);
+			result  = db.executeUpdate(sg);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
 		}		
+		return result  ;
 	}
 	
 
@@ -264,7 +265,7 @@ public class CrudDAO {
 				preDefQuery = crs.getString("SELQUERY");
 			}
 		}catch(SQLException e){
-			log(e.getMessage());
+			debug(5,e.getMessage());
 		}
 		return preDefQuery;
 	}
@@ -277,10 +278,10 @@ public class CrudDAO {
 		String colquery ="";
 		//metadata = new HashMap();
 		CachedRowSet crs = null;
-		log(updateClause.toString());
+		debug(0,updateClause.toString());
 		String SQL2 = 
 			"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
-	log("createUpdateQueryPart1:"+SQL2); 
+	debug(1,"createUpdateQueryPart1:"+SQL2); 
 		 try {
 				 crs = db.executeQuery(SQL2);
 			
@@ -320,7 +321,7 @@ public class CrudDAO {
 					
 				}
 			}
-			System.out.println(metadata);
+			debug(0,metadata.toString());
 			return searchQuery;
 		
 	}
@@ -335,10 +336,10 @@ public class CrudDAO {
 			String colquery ="";
 			//metadata = new HashMap();
 			CachedRowSet crs = null;
-			log(insertClause.toString());
+			debug(0,insertClause.toString());
 			String SQL2 = 
 				"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+panelName+"'";
-		log("createInsertQueryPart1:"+SQL2); 
+			debug(1,"createInsertQueryPart1:"+SQL2); 
 			 try {
 					 crs = db.executeQuery(SQL2);
 				

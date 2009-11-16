@@ -5,7 +5,7 @@
   name="simple">
    <start-state name="start">
       	<description>
-			/sendmail.jsp
+			/template1.action?screenName=frmRequestList
 		</description>
 		<transition name="to_state" to="first">
          <action name="action" class="com.sample.action.MessageActionHandler">
@@ -16,9 +16,11 @@
 			<action name="sam" class="businesslogic.LoginBL"></action>
 		</event>
    </start-state>
-   <state name="first">
+   <state name="first" >
+   		
 		<transition to="decision1"></transition>
 		<transition to="fork1" name="to fork1"></transition>
+		
    </state>
 
 	<node name="node1">
@@ -32,12 +34,17 @@
 		<transition to="end"></transition>
 	</join>
 
-	<decision name="decision1" expression="some expression">
-		<event type=""></event>
+	<decision name="decision1">
+		<description>
+			/decision.jsp
+		</description>
+		<handler class="some.class"></handler>
+		<event type="transition">
+			<action name="sam" class="businesslogic.LoginBL"></action>
+			<action expression="nice expression"></action>
+		</event>
 		<transition to="node1" name="to node1"></transition>
-		<transition to="task-node1" name="to task-node1">
-			<condition expression=""></condition>
-		</transition>
+		<transition to="task-node1" name="to task-node1"></transition>
 	</decision>
 
 	<task-node name="task-node1">
@@ -47,6 +54,9 @@
 			</description>
 			<assignment class=""></assignment>
 		</task>
+		<event type="before-signal">
+			<action></action>
+		</event>
 		<transition to="join1"></transition>
 	</task-node>
 

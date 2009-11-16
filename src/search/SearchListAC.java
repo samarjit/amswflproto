@@ -16,7 +16,12 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import dbconn.DBConnector;
 
-public class SearchList extends ActionSupport {
+/**
+ * RELATEDPANEL may be put in screen_panel
+ * @author Add
+ *
+ */
+public class SearchListAC extends ActionSupport {
 
 	private InputStream inputStream;
     public InputStream getInputStream() {
@@ -72,27 +77,28 @@ public class SearchList extends ActionSupport {
 			}
         }
         
-        /////////////////////
+        /////////////////////relatedpanel may be put in screen_panel ///////////////
         String SQL = 
-        	"select relatedpanel,splwhereclause from screen_panel where SORTORDER =1 and scr_name='"+scrname+"'";
+        	"select relatedpanel from screen  where   scr_name='"+scrname+"'";
         String relatedPanel = "";
         try {
 			CachedRowSet crs = db.executeQuery(SQL);
 			if(crs.next()){
 				relatedPanel = crs.getString("relatedpanel");
-				splWhereClause = crs.getString("splwhereclause");
+				
 			}
 			crs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		String SQL1 = 
-			"select TABLE_NAME from screen_panel where   scr_name='"+scrname+"' and panel_name='"+relatedPanel+"'";
+			"select TABLE_NAME,splwhereclause from screen_panel where   scr_name='"+scrname+"' and panel_name='"+relatedPanel+"'";
 		 String tableName = "";
         try {
 			CachedRowSet crs = db.executeQuery(SQL1);
 			while(crs.next()){
 				tableName = crs.getString("TABLE_NAME");
+				splWhereClause = crs.getString("splwhereclause");
 			}
 			crs.close();
 		} catch (SQLException e) {

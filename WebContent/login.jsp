@@ -1,3 +1,4 @@
+<%@ page language="java" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <html>
 <head>

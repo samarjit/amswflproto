@@ -11,17 +11,27 @@ public class Utility {
 	/**
 	 * @return where clause as key value pair in hashmaps, these hashmaps are again encapsulated into 
 	 * another hashmap whose key will be panelName
+	 * @throws JSONException 
 	 */
-	public static HashMap<String, String> extractWhereClause(String str/*String whereStringOfPanel String panelName */){
+	public static HashMap<String, String> extractWhereClause(String str/*String whereStringOfPanel String panelName */) throws JSONException{
 		//"whereClausefrmRequest"
 		
-		String strWhereClause = str;
-		String[] arWhere = strWhereClause.split("~#");
+//		String strWhereClause = str;
+//		String[] arWhere = strWhereClause.split("~#");
 		HashMap<String,String> whereClausePart = new HashMap<String, String>();
-		for(String strWhrKVpair:arWhere){
-			String[] kvpair = strWhrKVpair.split("!");
-			whereClausePart.put(kvpair[0], kvpair[1]);
+//		for(String strWhrKVpair:arWhere){
+//			String[] kvpair = strWhrKVpair.split("!");
+//			whereClausePart.put(kvpair[0], kvpair[1]);
+//		}
+		 
+		JSONObject jobj = new JSONObject(str);
+		JSONArray jarr = jobj.getJSONArray("json");
+		for(int i=0;i< jarr.length();i++){
+			JSONObject jo = jarr.getJSONObject(i);
+			 whereClausePart.put(jo.getString("key"), jo.getString("value"));
+			 
 		}
+	 	
 		return whereClausePart;
 	}
 	
@@ -81,4 +91,12 @@ public class Utility {
 		return whereClause;
 	}
 	
+	public static void main(String args[]){
+		String jsontest ="{\"json\":[{\"key\":\"mgrid\",\"value\":\"1\"},{\"key\":\"empid\",\"value\":\"2\"},{\"key\":\"reqid\",\"value\":\"1812\"}]}";
+		try {
+			System.out.println(Utility.extractWhereClause(jsontest));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
 }

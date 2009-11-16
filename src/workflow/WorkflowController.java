@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import businesslogic.BaseBL;
+
 import com.opensymphony.workflow.InvalidActionException;
 import com.opensymphony.workflow.InvalidEntryStateException;
 import com.opensymphony.workflow.InvalidInputException;
@@ -112,6 +114,8 @@ public class WorkflowController extends HttpServlet {
 			        int action = Integer.parseInt(doString);
 			        try {
 						wf.doAction(id, action, Collections.EMPTY_MAP);
+						 
+						
 					} catch (InvalidInputException e) {
 						e.printStackTrace();
 					} catch (WorkflowException e) {

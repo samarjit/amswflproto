@@ -19,13 +19,14 @@ public class UpdateData {
 	 * main function is used only for testing doDelete() is the method that does 
 	 * really works
 	 * @param args
+	 * @throws JSONException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JSONException {
 		UpdateData dd = new UpdateData ();
 		dd.doUpdate();
 
 	}
-	public void doUpdate(){
+	public void doUpdate() throws JSONException{
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
 		String scrName="frmRequest";

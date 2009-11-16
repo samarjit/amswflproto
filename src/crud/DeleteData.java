@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
 
+import org.json.JSONException;
+
 import util.Utility;
 import dao.CrudDAO;
 
@@ -17,13 +19,14 @@ public class DeleteData {
 	 * main function is used only for testing doDelete() is the method that does 
 	 * really works
 	 * @param args
+	 * @throws JSONException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JSONException {
 		DeleteData dd = new DeleteData();
 		dd.doDelete();
 
 	}
-	public void doDelete(){
+	public void doDelete() throws JSONException{
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
 		String scrName="frmRequest";

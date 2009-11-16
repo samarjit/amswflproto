@@ -1,22 +1,12 @@
 package view;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts2.ServletActionContext;
-
-import workflow.WorkflowBean;
-
-import com.opensymphony.workflow.InvalidInputException;
-import com.opensymphony.workflow.WorkflowException;
-import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class actionclass extends ActionSupport{
+public class GenerateHtml extends ActionSupport{
 public String user;
 public String password;
 public String dataPanel;
@@ -31,8 +21,13 @@ private String cssname;
 private String jsname;
 private String panelFieldsWhereClause;
 
-
- 
+private void debug( int priority,String s){
+//	if(priority > 0)
+//	System.out.println("GenerateHtml:"+s);
+}
+private void debug(String s){
+//	System.out.println("GenerateHtml:"+s);
+}
 
 public String getPanelFieldsWhereClause() {
 	return panelFieldsWhereClause;
@@ -150,8 +145,7 @@ public void setPassword(String password) {
 	}
 
 	public String execute() {
-		 System.out.println("Hello world");
-		 System.out.println(user+ "  "+password);
+		  
 		 String templateName;
 		 Createhtml htmlc = new Createhtml();
 		 
@@ -161,7 +155,7 @@ public void setPassword(String password) {
 		 List<String> lstPanels =  htmlc.getPanels(screenName);
 		 LinkedHashMap<String,String> arPanelData = new LinkedHashMap<String, String>();
 		 for(String panelName:lstPanels){
-			System.out.println("##"+panelName);
+			debug(0,"##"+panelName);
 			 arPanelData.put(panelName,htmlc.makehtml(screenName,panelName));
 		 } 
 		 templateName = htmlc.getTemplateName(screenName);

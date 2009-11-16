@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="DesignerOutput/foxtrot.jar"/>
 	<classpathentry kind="lib" path="DesignerOutput/syntax.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre6"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v6.0"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

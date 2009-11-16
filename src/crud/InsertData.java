@@ -36,6 +36,7 @@ public class InsertData {
 		String html = ""; //outer
 		String htmlTemp = "";
 		CachedRowSet crs = null;
+		int insertResult = 0;
 		log("lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
 		while (itrPanel.hasNext())
@@ -48,15 +49,16 @@ public class InsertData {
 			String sg = createInsertQuery(metadata, scrName, panelName,insertClause );
 			if(sg != null && !("".equals(sg))){
 				try {
-					cd.executeInsertQuery(sg);
+					insertResult  = cd.executeInsertQuery(sg);
 				} catch (Exception e) {
 					System.out.println("Failed in insert");
 					e.printStackTrace();
+					insertResult  = -1;
 				}
 				log("Insert query:" + sg);
 			}						
 		}
-		
+		html = String.valueOf(insertResult);
 		return html;
 	}
 	
