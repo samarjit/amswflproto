@@ -124,6 +124,8 @@ public class RetreiveData {
 	} 
 	
 	/**
+	 * predifined query should be upto table(+)
+	 * splWhereClause will only contain TBLCOLUMN like '%%' 
 	 * @param metadata [passed on]empty initially passed on to be filled createRetrieveQueryPart1 
 	 * @param scrname [input]
 	 * @param panelName [input]
@@ -136,9 +138,9 @@ public class RetreiveData {
 		
 		CrudDAO cd = new CrudDAO();
 		String predefQuery = cd.findPreDefQuery(scrname,panelName);
-		if(predefQuery!=null && predefQuery.length() > 0 ){
-			joiner =" AND ";
-		}
+//		if(predefQuery!=null && predefQuery.length() > 0 ){
+//			joiner =" AND ";
+//		}
 		String qryPart1 = cd.createRetrieveQueryPart1(metadata,scrname,panelName);
 		String tableName =  cd.findTableByPanels(scrname,panelName);
 		String splWhereClause = cd.findSplWhereClsOfPanels(scrname,panelName);
@@ -153,7 +155,7 @@ public class RetreiveData {
 		//process where clause
 		debug(0,"hmWherePanel"+hmWherePanel);
 		String strWhereQuery  = cd.createWhereClause(joiner,scrname,panelName,hmWherePanel,true);
-		debug(0,"strWhereQuery="+strWhereQuery+"table name:"+tableName);
+		debug(0,"splWhereClause:"+splWhereClause+";strWhereQuery="+strWhereQuery+";table name:"+tableName);
 		
 		if(tableName!= null && tableName.length() >0 && strWhereQuery!=null && strWhereQuery.length()>0)
 			if(predefQuery!=null && predefQuery.length() > 0 ){

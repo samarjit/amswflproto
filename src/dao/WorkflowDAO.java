@@ -3,6 +3,7 @@ package dao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.sql.rowset.CachedRowSet;
 
@@ -122,24 +123,36 @@ public class WorkflowDAO {
 		}
 		return wflName;
 	}
-	public void createApplication(String userid, long id,String appid,String status) {
+	public void createApplication(String userid, long id,String appid,String status, HashMap hmActions) {
 		DBConnector db = new DBConnector();
 		int i =0;
-		 String SQL = "INSERT INTO  USER_WFLID_APPID (WFLID, USERID, STATUS,APPID)  " +
-		"VALUES ('" +String.valueOf(id)+"'"+
-		" ,'" +userid+"'"+
-		" ,'" +status+"'"+
-		" ,'" +appid+"'"+
-		" ) ";
- 
-		try {
-				i = db.executeUpdate(SQL);
-				 
-		} catch (SQLException e) {
-			log(e.getMessage());
-		}finally{
+		
+		 
+		 Iterator itr = hmActions.keySet().iterator();
+		 while (itr.hasNext()) {
+			String actoinName = (String) itr.next();
+			long action = (Long) hmActions.get(actoinName);
 			 
+			 try {
+			String SQL = "INSERT INTO  USER_WFLID_APPID (WFLID, USERID, STATUS,APPID,WFLACTIONID,  WFLACTIONDESC)  " +
+					"VALUES ('" +String.valueOf(id)+"'"+
+					" ,'" +userid+"'"+
+					" ,'" +status+"'"+
+					" ,'" +appid+"'"+
+					",'"+action+"'"+
+					",'"+actoinName+"'"+
+					" ) ";
+				 
+				i += db.executeUpdate(SQL);
+				
+				} catch (SQLException e) {
+					log(e.getMessage());
+				}finally{
+					 
+				}
 		}
+ 
+		
 	}
 	public String getScreenId(String activityname) {
 		DBConnector db = new DBConnector();
@@ -160,6 +173,16 @@ public class WorkflowDAO {
 				log(e.getMessage());
 			}
 		}
-		return screenName;
+		return screenName;	
+	}
+	public void changeStageApplicationWfl(String userName, long id,
+			String appid, String status, int action) {
+		
+		 
+	}
+	public void updateApplicationWfl(String userid, long id, String appid,
+			String status, HashMap hmActions) {
+
+		
 	}
 }

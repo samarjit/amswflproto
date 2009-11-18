@@ -130,14 +130,29 @@ wf.doAction(id, 1, inputs);*/
 		
 	}
 
-	public void createApplicationWfl(String userid, long id, String appid,String status) {
+	public void createApplicationWfl(String userid, long id, String appid,String status, HashMap hmActions) {
 		WorkflowDAO wflDAO = new WorkflowDAO();
-		wflDAO.createApplication( userid,  id, appid, status);
+		wflDAO.createApplication( userid,  id, appid, status,hmActions);
 		
 	}
 
 	public String getScreenId(String activityname) {
 		WorkflowDAO wflDAO = new WorkflowDAO();
 		return wflDAO.getScreenId( activityname);
+	}
+
+	public void changeStageApplicationWfl(String userName, long id, String wflSession,
+			String status, int action) {
+		WorkflowDAO wflDAO = new WorkflowDAO();
+		 wflDAO.changeStageApplicationWfl(  userName,   id,   wflSession,
+				  status,   action);
+	}
+
+	public void updateApplicationWfl(String userid, long id, String wflSession,
+			String status, HashMap hmActions) {
+		WorkflowDAO wflDAO = new WorkflowDAO();
+		 wflDAO.updateApplicationWfl(  userid, id,   wflSession,
+				  status,   hmActions);
+		
 	}
 }

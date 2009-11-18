@@ -34,7 +34,7 @@ template 2
  Using Iterator
  <s:iterator  value="extraFields" >
  <s:set var="som" value="key" />
- <s:if test="#som != 'buttonPanel' && #som != 'searchPanel'">  
+ <s:if test="#som != 'buttonPanel' && #som == 'searchPanel'">  
  <div id='<s:property value="key"/>'> <s:property value="key"/><s:property value="value" escape="false"/></div>
  </s:if>
  </s:iterator>

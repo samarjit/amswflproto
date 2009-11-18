@@ -64,7 +64,7 @@ public class WorkflowController extends HttpServlet {
 				String appid = wflBean.getNewApplicationId();
 				String WflName = wflBean.getSuitableWorkflowName(activityname);
 				wflid = wflBean.workflowInit(appid,WflName,null);
-				wflBean.createApplicationWfl(usrDTO.getUserid(),wflid,appid,"S");//'S' for started
+				
 				//wflBean.createApplicationStatus(appid,activityname);
 				
 				HashMap hmActions= new HashMap();
@@ -86,7 +86,8 @@ public class WorkflowController extends HttpServlet {
 			        }
 			    }
 				
-				
+			    wflBean.createApplicationWfl(usrDTO.getUserid(),wflid,appid,"S", hmActions);//'S' for started
+			    
 				appdto.setAppid(String.valueOf(appid));
 				appdto.setCurrStage(activityname);
 				appdto.setWorkflowName(WflName);
@@ -104,6 +105,7 @@ public class WorkflowController extends HttpServlet {
 			
 			HttpSession session = request.getSession(false);
 			ApplicationDTO appdto = (ApplicationDTO)session.getAttribute("applicationDTO");
+			UserDTO usrDTO = (UserDTO)session.getAttribute("userSessionData");
 			wflSession = appdto.getAppid();
 			    Workflow wf = new BasicWorkflow(wflSession);
 			    //id is wflId
@@ -114,7 +116,7 @@ public class WorkflowController extends HttpServlet {
 			        int action = Integer.parseInt(doString);
 			        try {
 						wf.doAction(id, action, Collections.EMPTY_MAP);
-						 
+						wflBean.changeStageApplicationWfl(usrDTO.getUserid(),id,wflSession/*appid*/,"C", action);//'S' for started  
 						
 					} catch (InvalidInputException e) {
 						e.printStackTrace();
@@ -142,6 +144,8 @@ public class WorkflowController extends HttpServlet {
 			    	appdto.setCurrentActionId(-1);
 		        	appdto.setCurrentAction("");
 			    }
+			    wflBean.updateApplicationWfl(usrDTO.getUserid(), id,wflSession/*appid*/,"S", hmActions);//'S' for started
+			    
 			    
 			    appdto.setWflactions(hmActions);
 			    session.setAttribute("applicationDTO",appdto);

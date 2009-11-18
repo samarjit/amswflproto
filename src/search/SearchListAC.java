@@ -5,6 +5,7 @@ import java.io.StringBufferInputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import dao.CrudDAO;
 import dbconn.DBConnector;
 
 /**
@@ -23,6 +25,11 @@ import dbconn.DBConnector;
  */
 public class SearchListAC extends ActionSupport {
 
+	private void debug(int priority, String s){
+		if(priority > 0){
+			System.out.println("SearchListAC:"+s);
+		}
+	}
 	private InputStream inputStream;
     public InputStream getInputStream() {
         return inputStream;
@@ -43,7 +50,7 @@ public class SearchListAC extends ActionSupport {
         
         Iterator itr = map.keySet().iterator();
         
-       //System.out.println(map);
+       debug(1,map.toString());
         while(itr.hasNext()){
         	String fname = (String) itr.next();
         	 String val = request.getParameter(fname);
@@ -51,6 +58,7 @@ public class SearchListAC extends ActionSupport {
             	"select dbcol,datatype from panel_fields where  scr_name='"+scrname+"' and " +
             			"panel_name='"+panelName+"' " +
             			"and fname='"+fname+"'";
+        	debug(1,SQL);
         	CachedRowSet crs;
 			try {
 				crs = db.executeQuery(SQL);
@@ -80,6 +88,7 @@ public class SearchListAC extends ActionSupport {
         /////////////////////relatedpanel may be put in screen_panel ///////////////
         String SQL = 
         	"select relatedpanel from screen  where   scr_name='"+scrname+"'";
+        debug(1,SQL);
         String relatedPanel = "";
         try {
 			CachedRowSet crs = db.executeQuery(SQL);
@@ -94,7 +103,8 @@ public class SearchListAC extends ActionSupport {
 		String SQL1 = 
 			"select TABLE_NAME,splwhereclause from screen_panel where   scr_name='"+scrname+"' and panel_name='"+relatedPanel+"'";
 		 String tableName = "";
-        try {
+        debug(1,SQL1);
+		 try {
 			CachedRowSet crs = db.executeQuery(SQL1);
 			while(crs.next()){
 				tableName = crs.getString("TABLE_NAME");
@@ -106,8 +116,8 @@ public class SearchListAC extends ActionSupport {
 		}
 		String colquery ="";
 		String SQL2 = 
-			"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+relatedPanel+"'";
-		//System.out.println(SQL2); 
+			"select lblname,fname,idname,dbcol,datatype,classname,prkey,strquery from panel_fields where  scr_name='"+scrname+"' and panel_name='"+relatedPanel+"' order by ORDERNO";
+		 debug(1,SQL2); 
 		 
         try {
 			CachedRowSet crs = db.executeQuery(SQL2);
@@ -141,10 +151,27 @@ public class SearchListAC extends ActionSupport {
 		
 		searchQuery = "SELECT "+searchQuery + " FROM "+tableName+ searchQueryWhere ;
 		
+		CrudDAO cd = new CrudDAO();
+		String predefQuery = "";
+		
+		/*
+		 * predefquery will contain only the query upto TABLE(+)
+		 *   + searchQueryWhere + splWhereClause
+		 *   searchQueryWhere already took care of joiner
+		 */
+		predefQuery = cd.findPreDefQuery(scrname, relatedPanel);
+		if(predefQuery!=null && predefQuery.length() > 0 ){
+			searchQuery =predefQuery+" "+searchQueryWhere;
+			debug(1,"searching ffrom predef query");
+		}
+		
+		
 		if(null != splWhereClause && !"".equalsIgnoreCase(splWhereClause)){
 			searchQuery+= joiner + splWhereClause;
 		}
 		
+		
+		debug(1,searchQuery);
     	return searchQuery;
     }
     
@@ -169,7 +196,7 @@ public class SearchListAC extends ActionSupport {
 						String fname = (String) itr.next();
 						ListAttribute ls = (ListAttribute) metadata.get(fname);
 						data  = crs.getString(fname);
-						System.out.println(crs.getString(fname));
+						debug(0,crs.getString(fname));
 						if(firstItr){
 							tableHeader += "<th><div id="+fname+" style='display:none'>"+ls+"</div>"+ls.getLblname()+"</th>";
 							
@@ -184,6 +211,10 @@ public class SearchListAC extends ActionSupport {
 					 html += "</tr>";
 				
 				}
+				if(html== null || "".equals(html))
+				{
+					html="No data found";
+				}
 				html = "<table border=1>"+tableHeader+html+"</table>";
 			crs.close();
 		} catch (SQLException e) {
@@ -195,10 +226,10 @@ public class SearchListAC extends ActionSupport {
     	return html;
     }
     public String execute() throws Exception {
-    	HashMap metadata = new HashMap();
+    	HashMap metadata = new LinkedHashMap();
     	//inputStream = new StringBufferInputStream("Hello World! This is a text string response from a Struts 2 Action.");
         String qry  = createSearchQuery(metadata);
-        //System.out.println(qry);
+        //debug(qry);
         String resXML  = getResultXML (qry,metadata); 
         inputStream = new StringBufferInputStream(resXML);
         
