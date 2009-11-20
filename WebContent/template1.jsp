@@ -17,11 +17,13 @@
 <s:property value="jsname" escape="false"/>
 <s:url var="retriveurl" value="/retreivedetails.action" />
 <s:url var="inserturl" value="/insertdata.action" />
+<s:url var="updateurl" value="/updatedata.action" />
 
 <script language="javascript" >
 var retriveurlpart='<s:property value="%{#retriveurl}"/>';
 var inserturlpart='<s:property value="%{#inserturl}"/>';
 var screenName= '<s:property value="%{#parameters.screenName}"/>';
+var updateurlpart='<s:property value="%{#updateurl}"/>';
 var whereClause= '<s:property value="%{#parameters.panelFieldsWhereClause}"/>';
 </script>
 
