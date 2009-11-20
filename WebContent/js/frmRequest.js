@@ -33,11 +33,11 @@ function requestCallBack(p){
 			continue;
 		for(var k = 0; k<detailTable[i].rows[0].cells.length; k++) {			
 			//comStr = detailTable[i].rows[0].cells[k].childNodes[0].innerText.split(',')[2];	 			
-			//alert(comStr);
+
 			comStr=jQuery.trim(jQuery(detailTable[i].rows[0].cells[k]).find("div").text()).split(',')[2];
 			//alert(jQuery(detailTable[i].rows[0].cells[k]).find("div").text());
 			comVal = jQuery.trim(jQuery(detailTable[i].rows[1].cells[k]).text());	  
-			//alert(comVal);				
+			
 			//comVal = detailTable[i].rows[1].cells[k].innerText;	  
 			for(var l = 0; l<panelsTable.length; l++)
 			{
@@ -68,10 +68,10 @@ function requestCallBack(p){
 
 function disable_fields(){
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
-	alert("in disable fields ");
+
 	for(var i =0; i<panelsTable.length;i++){
 		
-		alert("panels "+ panelsTable[i].id);
+	//	alert("panels "+ panelsTable[i].id);
 		if (panelsTable[i].id == 'panelFields'){
 			
 		fields = panelsTable[i].getElementsByTagName("input");
@@ -92,7 +92,7 @@ function insertData() {
 
 
 function reqSubmit() {
-	alert("in submit ");
+	
 	prepareInsertData();
 }
 
@@ -106,7 +106,6 @@ function reqSave() {
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
 	prompt("url",url);	
 	url = url+ "&insertKeyValue="+ prepareInsertData();
-	alert("after url");
 	//prompt("url",url);
 	//add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
@@ -118,7 +117,7 @@ function reqSave() {
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
 		prompt("url",url);	
 		url = url+ "&insertKeyValue="+ prepareInsertData();
-		alert("in update!!!!!!! url" +url);
+
 		//prompt("url",url);
 		//add key:vlaue to url
 		
@@ -191,13 +190,11 @@ function updateData(obj){
 		//There will be only one table in search screen 'search div'
 		//document.requestFrm.submit();
 		listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
-alert(listTable.id);
 
 panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 
 for(var m =0; m<panelsTable.length;m++){
 	
-	//alert("update panels "+ panelsTable[m].id);
 	if (panelsTable[m].id == 'panelFields'){
 		
 	fields = panelsTable[m].getElementsByTagName("input");
@@ -278,6 +275,16 @@ function makeWhereClause(){
 }
 
 
-
+function submitactivity(){
+	alert("here in submit activity")
+	alert(wflcontrollerurl);
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
+	alert(applicationid);
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	//document.getElementById("submitanchor").href 	
+	location.href = wflcontrollerurl+"?action=true&do="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+		
+	}
 
 

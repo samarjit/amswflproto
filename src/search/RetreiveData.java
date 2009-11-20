@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.sql.rowset.CachedRowSet;
 
 import util.Utility;
@@ -30,6 +34,8 @@ public class RetreiveData {
 		String scrName="frmRequest";
 		List <String> lstPanelName = cd.findPanelByScrname(scrName);
 		HashMap<String, String> hmWhere = Utility.extractWhereClause( whereClause/*String whereStringOfPanel, String panelName */);
+		HashMap<String,HashMap<String,String>> tempData = new HashMap<String, HashMap<String,String>>();
+		HashMap<String,String> tempPanelData = null;
 		String html = ""; //outer
 		String htmlTemp = "";
 		CachedRowSet crs = null;
@@ -43,6 +49,10 @@ public class RetreiveData {
 			debug(0,"******** calling creteRetreiveQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
 		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
 			metadata = new HashMap();
+			
+			//Fill this for every Panel
+			tempPanelData = new HashMap();
+			
 			//column metadata should get populated here
 			String sg = createRetrieveQuery(metadata, scrName,	panelName, hmWhere);
 			debug(1,"Retrieve query:" + sg);
@@ -51,11 +61,14 @@ public class RetreiveData {
 			
 			if (sg != null && sg.length() > 0) 	{
 				try {
+					//replace referenced whereClause
+					sg  = replaceRefWhereClause(sg,tempData);
+					 
 					crs = cd.executeRetrieveQuery(sg);
 					htmlTemp = "";
 					boolean firstItr = true;
 					String data = "";
-					
+					String fname="";
 					//Ideally this loop should run once in case of detail-data retrieval
 					while (crs.next()) {
 						htmlTemp += "\n<tr >";
@@ -68,7 +81,7 @@ public class RetreiveData {
 									" Retreive Data : metadata null");
 						Iterator itrmetadata = metadata.keySet().iterator();
 						while (itrmetadata.hasNext()) {
-							String fname = (String) itrmetadata.next();
+						    fname = (String) itrmetadata.next();
 							ListAttribute ls = (ListAttribute) metadata
 									.get(fname);
 							debug(0,"Fname=" + fname);
@@ -86,11 +99,14 @@ public class RetreiveData {
 							firstItr = false;
 						}
 						htmlTemp += "</tr>";
+						
+						
+						tempPanelData.put(fname, data);
 						debug(0,htmlTemp);
 					} //while crs.next()
-					
+					tempData.put(panelName, tempPanelData);
 				} catch (Exception e) {
-					e.printStackTrace();
+					 e.printStackTrace();
 					htmlTemp = "";
 					tableHeader = "No data found";
 				} finally {
@@ -113,6 +129,30 @@ public class RetreiveData {
 		return html;
 	}
 	
+	private String replaceRefWhereClause(String sg,HashMap<String, HashMap<String, String>> tempData) {
+		debug(0,"in replace where parts");
+		Pattern pattern = Pattern.compile("\\{(.*?)\\}");
+        Matcher matcher  = pattern.matcher(sg);
+        String resultStr = new String(sg);
+		while(matcher.find()){
+			String str = matcher.group();
+			String g = str;
+			str = g.substring(1,g.length()-1);  	
+			String parts[] = str.split("\\.");
+			if(parts.length > 1){
+			HashMap<String,String> hm = tempData.get(parts[0]);
+			String val = hm.get(parts[1]);
+			StringBuffer charseq=new StringBuffer(g);
+			resultStr =  resultStr.replace(charseq, val);
+			}
+			 
+		}
+		debug(0,"resultStr:"+resultStr);
+		return resultStr;
+	}
+
+
+
 	/**
 	 * Expecting whereClause[PanelName]=field!value~#field1!value1
 	 * @param args
@@ -147,7 +187,7 @@ public class RetreiveData {
 		  
 		
 		if(splWhereClause != null && ! "".equals(splWhereClause) ){
-			splWhereClause += joiner + splWhereClause+" ";
+			splWhereClause  = joiner + splWhereClause+" ";
 			joiner =" AND ";
 		}else{
 			splWhereClause =" ";
@@ -157,7 +197,7 @@ public class RetreiveData {
 		String strWhereQuery  = cd.createWhereClause(joiner,scrname,panelName,hmWherePanel,true);
 		debug(0,"splWhereClause:"+splWhereClause+";strWhereQuery="+strWhereQuery+";table name:"+tableName);
 		
-		if(tableName!= null && tableName.length() >0 && strWhereQuery!=null && strWhereQuery.length()>0)
+		if(tableName!= null && tableName.length() >0 && ((strWhereQuery!=null && strWhereQuery.length()>0) || ( splWhereClause!=null && splWhereClause.length() >0)))
 			if(predefQuery!=null && predefQuery.length() > 0 ){
 				retrieveQuery =predefQuery+" "+splWhereClause+strWhereQuery;
 			}else{

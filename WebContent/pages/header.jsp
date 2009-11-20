@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <h1>Asset Management System</h1>
 <script>
-function fnsubmit(ac) {alert(ac);
+function fnCreateActivity(ac) { 
 	var ctxpath = '<%=request.getContextPath() %>';
 	var url=ctxpath+'/WorkflowController.do?';
 	if(ac== 'CR'){
@@ -16,11 +16,12 @@ location.href=url;
 }
 </script>
 <hr/>
-<jsp:include page="/pages/wflproto.jsp"></jsp:include>
 Menu:
-Request|RFQ|Quotation
+Request|RFQ|Quotation<br/>
+<jsp:include page="/pages/wflproto.jsp"></jsp:include>
+
 
 <hr/>
-<div style="display:none">
+<div style="display:block">
 <jsp:include page="/pages/actionbutton.jsp"></jsp:include>
 </div>

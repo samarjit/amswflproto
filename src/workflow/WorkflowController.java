@@ -100,18 +100,31 @@ public class WorkflowController extends HttpServlet {
 				session.setAttribute("username", usrDTO.getUserid());
 		}else if(request.getParameter("action") != null){
 			HashMap hmActions= new HashMap();
-			String wflSession = "";
+			String appid = request.getParameter("appid"); //appid
+			String wflid = request.getParameter("wflid");
+			String doString = request.getParameter("do");
+			System.out.println(appid+" "+wflid+" "+doString);
 			WorkflowBean wflBean = new WorkflowBean();
 			
 			HttpSession session = request.getSession(false);
 			ApplicationDTO appdto = (ApplicationDTO)session.getAttribute("applicationDTO");
 			UserDTO usrDTO = (UserDTO)session.getAttribute("userSessionData");
-			wflSession = appdto.getAppid();
+			
+			if(appdto == null)appdto = new ApplicationDTO();
+			if(appid != null && appid.length() > 0){
+				appdto.setAppid(appid);
+			}
+			if(wflid != null && wflid.length() > 0){
+				appdto.setWflid(Long.parseLong(wflid));
+			}
+			
+			String wflSession = appdto.getAppid();
 			    Workflow wf = new BasicWorkflow(wflSession);
 			    //id is wflId
-			    long id = appdto.getWflid();
-			     
-			    String doString = request.getParameter("do");
+			    long id = 0;
+			    id = appdto.getWflid();
+			      
+			   
 			    if (doString != null && !doString.equals("")) {
 			        int action = Integer.parseInt(doString);
 			        try {
