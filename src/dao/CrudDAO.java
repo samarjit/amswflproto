@@ -135,7 +135,12 @@ public class CrudDAO {
 					if(colquery !=null && colquery.length() > 1){
 						searchQuery +="("+colquery+") "+crs.getString("fname")+",";
 					}else{
-						searchQuery +=crs.getString("dbcol")+" "+crs.getString("fname")+",";
+						String datatype = crs.getString("datatype");
+						if("DATE".equals(datatype)){
+							searchQuery += "TO_CHAR("+crs.getString("dbcol")+",'dd/mm/yyyy') "+crs.getString("fname")+",";
+						}else{
+							searchQuery +=crs.getString("dbcol")+" "+crs.getString("fname")+",";
+						}
 					}
 				}
 				if(searchQuery.length() > 0){
@@ -270,11 +275,10 @@ public class CrudDAO {
 		return preDefQuery;
 	}
 
-	public String createUpdateQueryPart1(HashMap metadata, String scrname,
-			String panelName,HashMap updateClause) {
+	public String createUpdateQueryPart1(HashMap metadata, String scrname, String panelName,HashMap updateClause) {
 		DBConnector db = new DBConnector();
 		String strQuery="";
-		String searchQuery = "";
+		String updateQuery = "";
 		String colquery ="";
 		//metadata = new HashMap();
 		CachedRowSet crs = null;
@@ -298,16 +302,26 @@ public class CrudDAO {
 					colquery = crs.getString("strquery");
 					
 					String fname= crs.getString("fname");
+					String datatype = crs.getString("datatype");
 					if(updateClause.get(fname.toLowerCase())!= null)
 						{
-						searchQuery +=crs.getString("dbcol")+"= '"+updateClause.get(fname.toLowerCase())+"' ,";
+						
+						if("DATE".equals(datatype)){
+							updateQuery +=crs.getString("dbcol")+"= TO_DATE('"+updateClause.get(fname.toLowerCase())+"','dd/mm/yyyy') ,";	
+						}else{
+							updateQuery +=crs.getString("dbcol")+"= '"+updateClause.get(fname.toLowerCase())+"' ,";
+						}
+						
+						 
 						metadata.put(crs.getString("fname"), ls) ;
 						}
+					debug(0,"list attribuite********* " +ls+"  #fname="+fname.toLowerCase()+" #"+updateClause.get(fname.toLowerCase()));
 					 
 				}
-				if(searchQuery.length() > 0){
-					searchQuery = searchQuery.substring(0, searchQuery.length()-1);
+				if(updateQuery.length() > 0){
+					updateQuery = updateQuery.substring(0, updateQuery.length()-1);
 				}
+				
 				crs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -322,7 +336,8 @@ public class CrudDAO {
 				}
 			}
 			debug(0,metadata.toString());
-			return searchQuery;
+			debug(1,"Update query: "+updateQuery);
+			return updateQuery;
 		
 	}
 
@@ -356,10 +371,16 @@ public class CrudDAO {
 						colquery = crs.getString("strquery");
 						
 						String fname= crs.getString("fname");
+						String datatype = crs.getString("datatype");
 						if(insertClause.get(fname.toLowerCase())!= null)
 							{
 							dbcolStr +=crs.getString("dbcol")+",";
-							valueStr += "'"+insertClause.get(fname.toLowerCase())+"' ,";
+							if("DATE".equals(datatype)){
+								valueStr += "TO_DATE('"+insertClause.get(fname.toLowerCase())+"','dd/mm/yyyy') ,";
+							}else{
+								valueStr += "'"+insertClause.get(fname.toLowerCase())+"' ,";
+							}
+							
 							metadata.put(crs.getString("fname"), ls) ;
 							}
 						 
@@ -383,7 +404,7 @@ public class CrudDAO {
 						
 					}
 				}
-				//System.out.println(metadata);
+				
 				return inesrtqryPart;
 	}
 
