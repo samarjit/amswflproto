@@ -61,7 +61,29 @@ function requestCallBack(p){
 			}
 		}
 	}
+	
+	disable_fields();
 
+}
+
+function disable_fields(){
+	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+	alert("in disable fields ");
+	for(var i =0; i<panelsTable.length;i++){
+		
+		alert("panels "+ panelsTable[i].id);
+		if (panelsTable[i].id == 'panelFields'){
+			
+		fields = panelsTable[i].getElementsByTagName("input");
+			alert("inside panel panels " + fields.length);
+			for(var k = 0; k<fields.length; k++){
+			//	alert("inside panel panels " + fields[k].id);
+				fields[k].disabled = true;
+			
+			}
+		
+		}
+	}
 }
 
 function insertData() {
@@ -76,13 +98,34 @@ function reqSubmit() {
 
 function reqSave() {
 	//alert("in save ");	
-	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;		
+	//alert(inserturlpart);
+	//alert("in savesdkgf ");	
+	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
+	
+	if(!(document.getElementById("searchdiv").hasChildNodes())){
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
-	//prompt("url",url);	
-	url = url+ "&insertKeyValue="+prepareInsertData();
+	prompt("url",url);	
+	url = url+ "&insertKeyValue="+ prepareInsertData();
+	alert("after url");
 	//prompt("url",url);
 	//add key:vlaue to url
 	sendAjaxGet(url, saveCallBack);
+
+	}
+	
+	if(document.getElementById("searchdiv").hasChildNodes()){
+		whereclause  = makeWhereClause();
+		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
+		prompt("url",url);	
+		url = url+ "&insertKeyValue="+ prepareInsertData();
+		alert("in update!!!!!!! url" +url);
+		//prompt("url",url);
+		//add key:vlaue to url
+		
+
+		sendAjaxGet(url, saveCallBack);
+		}
+	
 }
 
 function saveCallBack(val) {
@@ -140,6 +183,100 @@ function prepareInsertData() {
 		//alert(myJSONText );	
 		return myJSONText;			
 }
+
+
+function updateData(obj){
+	obj.disabled = true;
+	 
+		//There will be only one table in search screen 'search div'
+		//document.requestFrm.submit();
+		listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
+alert(listTable.id);
+
+panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
+
+for(var m =0; m<panelsTable.length;m++){
+	
+	//alert("update panels "+ panelsTable[m].id);
+	if (panelsTable[m].id == 'panelFields'){
+		
+	fields = panelsTable[m].getElementsByTagName("input");
+		//alert("inside update panel panels " + fields.length);
+		for(var k = 0; k<fields.length; k++){
+		//	alert("inside panel panels " + fields[k].id);
+			for (i = 0; i <listTable.rows[0].cells.length ; i++ )
+			{
+				//alert(fields[k].id);
+				if(!(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]  == 'Y')) {
+					
+					if(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[3] == fields[k].id){
+						
+						fields[k].disabled = false;
+				}
+			}
+				
+				//for date
+if((listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[4] == 'DATE')) {
+					
+					if(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[3] == fields[k].id){
+						fields[k].disabled = true;
+				}
+			} 
+			
+		
+		}
+	
+	}
+}
+			
+			
+		
+}
+
+
+
+	}
+
+function makeWhereClause(){
+	 
+	// alert("in make url,selectedIdx:"+selectedIdx);
+	//There will be only one table in search screen 'search div'
+	
+	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
+
+	whereClause = "panelFields1WhereClause=";
+	if(listTable != null){
+		//poplate wher clause url
+		var j=0;
+		requestar = new Array();
+		for (i = 0; i <listTable.rows[0].cells.length ; i++ )
+		{  
+			//alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
+			if(jQuery("#searchdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
+				name = jQuery("#searchdiv").find(" table  tbody tr th").eq(i).find("div").text().split(',')[2];	 
+				name = jQuery.trim(name);
+				value = jQuery("#searchdiv").find(" table tbody tr").eq(1).find(" td").eq(i).text();
+				value = jQuery.trim(value);
+				whereClause = whereClause + name + "!" + value + "~#";
+				requestar[j] = new KeyValue(name, value);				
+				j++;		
+				//alert(jQuery("#searchdiv table th:eq("+i+") div").text());
+			}
+		}
+		var k = new Object();
+		k.json = requestar;
+		var myJSONText = JSON.stringify(k, replacer,"");
+		
+		whereClause = encodeURIComponent(myJSONText);//whereClause.replace(/(~#)$/, '');
+		 
+		 
+		
+	}
+	
+	return whereClause;	 
+
+}
+
 
 
 
