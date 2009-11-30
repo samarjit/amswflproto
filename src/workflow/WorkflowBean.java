@@ -1,9 +1,11 @@
 package workflow;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.opensymphony.workflow.InvalidActionException;
 import com.opensymphony.workflow.InvalidEntryStateException;
@@ -153,6 +155,28 @@ wf.doAction(id, 1, inputs);*/
 		WorkflowDAO wflDAO = new WorkflowDAO();
 		 wflDAO.updateApplicationWfl(  userid, id,   wflSession,
 				  status,   hmActions);
+		
+	}
+	public HashMap<String, Integer> getAvailableActions(String appid, long wflid){
+		 HashMap<String, Integer> hmActions = new HashMap<String, Integer>();
+		Workflow wf = new BasicWorkflow(appid);
+		int[] actions = wf.getAvailableActions(wflid, null);
+	    WorkflowDescriptor wd =  wf.getWorkflowDescriptor(wf.getWorkflowName(wflid));
+	    for (int i = 0; i < actions.length; i++) {
+	        String name = wd.getAction(actions[i]).getName();
+	        System.out.print(actions[i]+" "+name +" \n");
+	       
+			hmActions.put( name,actions[i]);
+	        //<a href="wflview.jsp?id=<%=id%>&do=<%= actions[i] %>"><%= name %></a>
+	       
+	       
+	    }
+	    return hmActions;
+	}
+
+	public void doAction(String wflSession, long id, int action  ) throws InvalidInputException, WorkflowException {
+		Workflow wf = new BasicWorkflow(wflSession);
+		  wf.doAction(id, action, Collections.EMPTY_MAP);
 		
 	}
 }

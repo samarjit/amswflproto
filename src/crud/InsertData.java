@@ -39,7 +39,7 @@ public class InsertData {
 		int insertResult = 0;
 		log("lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
-		while (itrPanel.hasNext())
+		if (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
 			log("******** calling creteInsertQuery panel name#"+panelName + "insertClause" + insertClause);

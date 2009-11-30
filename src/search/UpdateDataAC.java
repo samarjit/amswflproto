@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.json.JSONException;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -43,7 +44,7 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
 	}
 	
 	
-	public String execute() throws Exception {
+	public String execute()  {
 		HashMap metadata = new HashMap();
     	UpdateData update = new UpdateData();
     	
@@ -69,7 +70,12 @@ public class UpdateDataAC extends ActionSupport implements ServletRequestAware {
     	
     	String resultHtml = "No Data found";
     	if(insertKeyValue != null || (!"".equals(insertKeyValue)))
-    		resultHtml = update.doUpdate(screenName, insertKeyValue, whereclause);
+			try {
+				resultHtml = update.doUpdate(screenName, insertKeyValue, whereclause);
+			} catch (JSONException e) {
+				debug(5,e.getMessage());
+				e.printStackTrace();
+			}
     		//resultHtml  = "hii i cant write now.. ";
     	
         debug(5,"Update Result"+resultHtml);

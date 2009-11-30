@@ -86,7 +86,7 @@ public class RetreiveData {
 									.get(fname);
 							debug(0,"Fname=" + fname);
 							data = crs.getString(fname);
-
+							if(data == null)data="";
 							if (firstItr) {
 								tableHeader += "<th><div id=" + fname
 										+ " style='display:none'>" + ls

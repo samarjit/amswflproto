@@ -12,21 +12,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-
-Workflow Session Name:<%String sessionName= (String) session.getAttribute("workflowSessName"); %><%=sessionName %><br/>
-WorkflowId:<%String wflId = (String)Long.toString((Long) session.getAttribute("wflId")); %><%=wflId %><br/>
-Workflow Stage:<%= (String) session.getAttribute("username") %><br/>
-Workflow Next Stage:<%= (String) session.getAttribute("username") %><br/>
+ 
 
 <% String url=response.encodeURL("WorkflowController.do"); %>
 <%String context = request.getContextPath(); %>
 <jsp:include page="/pages/wflproto.jsp"></jsp:include>
-
-<a href="<%=url %>?action=true&id=<%=wflId %>&workflowSessName=<%=sessionName %>" >Start</a>
-<c:out value="${workflowSessName }"/>
+ 
 <c:forEach var="action" items="${hmActions}">
- <a href="<%=url %>?action=true&workflowSessName=<%=sessionName %>&id=<%=wflId %>&do=<c:out value="${action.value}" />" ><c:out value="${action.key}"/></a>
+ <a id="submitanchor" href="<%=url %>?action=true&doString=${action.value}&wflid=${applicationDTO.wflid}"+>${action.key}</a> 
  <c:out value="${action.key}"/> : <c:out value="${action.value}" /><br>
  
 </c:forEach>

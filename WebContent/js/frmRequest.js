@@ -11,6 +11,7 @@ function populate()
 	}	
 	//alert("In populate");
 }
+var screenMode = "insert";
 
 function clearWhereClause(){
 	document.getElementById("panelFieldsWhereClause").Value = "";
@@ -98,11 +99,11 @@ function reqSubmit() {
 
 function reqSave() {
 	//alert("in save ");	
-	//alert(inserturlpart);
+	alert(inserturlpart);
 	//alert("in savesdkgf ");	
 	//var url=urlpart+"?panelName=searchPanel&screenName=frmRequest"+screenName;	
 	
-	if(!(document.getElementById("searchdiv").hasChildNodes())){
+	if(screenMode == "insert"){
 	var url=inserturlpart+"?panelName=searchPanel&screenName=frmRequest";
 	prompt("url",url);	
 	url = url+ "&insertKeyValue="+ prepareInsertData();
@@ -112,7 +113,7 @@ function reqSave() {
 
 	}
 	
-	if(document.getElementById("searchdiv").hasChildNodes()){
+	if(screenMode == "modify"){
 		whereclause  = makeWhereClause();
 		var url=updateurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
 		prompt("url",url);	
@@ -186,7 +187,7 @@ function prepareInsertData() {
 
 function updateData(obj){
 	obj.disabled = true;
-	 
+	screenMode = "modify";
 		//There will be only one table in search screen 'search div'
 		//document.requestFrm.submit();
 		listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
@@ -282,8 +283,9 @@ function submitactivity(){
 	alert(applicationid);
 	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactionid]").attr("value");
 	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
-	//document.getElementById("submitanchor").href 	
-	location.href = wflcontrollerurl+"?action=true&do="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+	
+	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
 		
 	}
 

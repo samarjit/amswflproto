@@ -34,6 +34,12 @@ public class SearchListAC extends ActionSupport {
     public InputStream getInputStream() {
         return inputStream;
     }
+    /**
+     * Related Panel concept is used because some fields in main details table say reqdate can be actually 
+     * two dates from and todate in search panel. 
+     * @param metadata
+     * @return
+     */
     public String createSearchQuery(HashMap metadata){
     	String searchQueryWhere = "";
     	String splWhereClause = "";

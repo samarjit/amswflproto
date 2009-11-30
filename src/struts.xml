@@ -5,12 +5,27 @@
 <struts>
 <constant name="struts.devMode" value="true"></constant>
  
-	<package name="workflow" namespace="/" extends="struts-default">
+	<package name="login" namespace="/" extends="struts-default">
 		<action name="login" class="view.login">
 			<result name="success">/pages/dashboard.jsp</result>
 			<result name="error">/pages/error.jsp</result>
+	
 		</action>
 	</package>
+	
+	<package name="workflow" namespace="/" extends="struts-default">
+		<action name="workflow" class="workflow.WorkflowAC">
+			<result name="success">/pages/workflowcompleted.jsp</result>
+			<result  name="template1" type="redirectAction">
+							<param name="actionName">template1</param> 
+			                <param name="screenName">${screenName}</param>
+			            </result>
+			<result name="flowcontroller" type="redirect">
+							<param name="location">${redirecturl}</param>
+						</result>
+		</action>
+	</package>
+	
 	<package name="default2" namespace="/" extends="struts-default">
 		<action name="dynamic" class="view.GenerateHtml">
 			<result  name="success">/index.jsp</result>

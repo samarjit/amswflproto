@@ -4,7 +4,7 @@
 <script>
 function fnCreateActivity(ac) { 
 	var ctxpath = '<%=request.getContextPath() %>';
-	var url=ctxpath+'/WorkflowController.do?';
+	var url=ctxpath+'/workflow.action?';
 	if(ac== 'CR'){
 	url+="activityname=CR&create=true";
 	}else if(ac=='RFQ'){

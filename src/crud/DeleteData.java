@@ -12,7 +12,7 @@ import util.Utility;
 import dao.CrudDAO;
 
 public class DeleteData {
-	public void log(String s){
+	private void debug(int priority, String s){
 		System.out.println(s);
 	}
 	/**
@@ -35,17 +35,17 @@ public class DeleteData {
 		String html = ""; //outer
 		String htmlTemp = "";
 		CachedRowSet crs = null;
-		log("lstPanelName:"+lstPanelName);
+		debug(0, "lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
 		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
-			log("******** calling creteDeleteQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
+			debug(0, "******** calling creteDeleteQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
 		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
 			metadata = new HashMap();
 			//column metadata should get populated here
 			String sg = createDeleteQuery(metadata, scrName,	panelName, hmWhere);
-			log("Delete query:" + sg);
+			debug(0, "Delete query:" + sg);
 			
 		}
 	}
@@ -76,7 +76,7 @@ public class DeleteData {
 				delQuery ="DELETE  " + " FROM "+tableName+splWhereClause+strWhereQuery; 
 		}
 		else {
-			log("Incomplete query was:"+"DELETE " + " FROM "+tableName+splWhereClause+strWhereQuery);
+			debug(0, "Incomplete query was:"+"DELETE " + " FROM "+tableName+splWhereClause+strWhereQuery);
 		}
 		return delQuery;
 	}

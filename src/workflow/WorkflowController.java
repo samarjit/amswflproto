@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import businesslogic.BaseBL;
-
 import com.opensymphony.workflow.InvalidActionException;
 import com.opensymphony.workflow.InvalidEntryStateException;
 import com.opensymphony.workflow.InvalidInputException;
@@ -102,7 +100,7 @@ public class WorkflowController extends HttpServlet {
 			HashMap hmActions= new HashMap();
 			String appid = request.getParameter("appid"); //appid
 			String wflid = request.getParameter("wflid");
-			String doString = request.getParameter("do");
+			String doString = request.getParameter("doString");
 			System.out.println(appid+" "+wflid+" "+doString);
 			WorkflowBean wflBean = new WorkflowBean();
 			

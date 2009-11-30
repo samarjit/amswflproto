@@ -55,6 +55,15 @@ id="WebApp_ID" version="2.5">
 		<servlet-class>
 		workflow.ScreenFlowControllerServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		FlowControllerServlet</display-name>
+		<servlet-name>FlowControllerServlet</servlet-name>
+		<servlet-class>
+		workflow.FlowControllerServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>WorkflowController</servlet-name>
 		<url-pattern>/WorkflowController.do</url-pattern>
@@ -66,6 +75,10 @@ id="WebApp_ID" version="2.5">
 	<servlet-mapping>
 		<servlet-name>ScreenFlowControllerServlet</servlet-name>
 		<url-pattern>/ScreenFlowControllerServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FlowControllerServlet</servlet-name>
+		<url-pattern>/FlowControllerServlet</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>/pages/login.jsp</welcome-file>

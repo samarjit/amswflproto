@@ -7,7 +7,11 @@ function search(){
 		url=url+'&sempid='+document.getElementById("sempid").value;
 	if(document.getElementById("sempname"))
 		url=url+'&sempname='+document.getElementById("sempname").value;
-		
+	if(document.getElementById("srequestid"))
+		url=url+'&srequestid='+document.getElementById("srequestid").value;
+	if(document.getElementById("requesttype"))
+		url=url+'&requesttype='+document.getElementById("requesttype").value;
+				
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){
