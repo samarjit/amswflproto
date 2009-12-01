@@ -126,6 +126,21 @@ function reqSave() {
 		sendAjaxGet(url, saveCallBack);
 		}
 	
+		
+}
+
+function deleteData(){
+	
+	whereclause  = makeWhereClause();
+	var url=deleteurlpart+"?wclause="+whereclause+"&screenName=frmRequest";
+	prompt("url",url);	
+	alert("in update!!!!!!! url" +url);
+	//prompt("url",url);
+	//add key:vlaue to url
+	
+
+	sendAjaxGet(url, saveCallBack);
+	
 }
 
 function saveCallBack(val) {
