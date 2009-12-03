@@ -22,11 +22,7 @@ public class InsertData {
 	 * really works
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		InsertData dd = new InsertData ();
-		dd.doInsert("frmRequest", "empid!0~#empname!sam samanta");
-
-	}
+	
 	public String doInsert(String screenName, String insertClause){
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
@@ -39,7 +35,7 @@ public class InsertData {
 		int insertResult = 0;
 		log("lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
-		if (itrPanel.hasNext())
+		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
 			log("******** calling creteInsertQuery panel name#"+panelName + "insertClause" + insertClause);
@@ -50,6 +46,7 @@ public class InsertData {
 			if(sg != null && !("".equals(sg))){
 				try {
 					insertResult  = cd.executeInsertQuery(sg);
+					System.out.println("inserted successfully");
 				} catch (Exception e) {
 					System.out.println("Failed in insert");
 					e.printStackTrace();
