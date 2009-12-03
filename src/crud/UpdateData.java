@@ -22,11 +22,7 @@ public class UpdateData {
 	 * really works
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		UpdateData dd = new UpdateData ();
-		//dd.doUpdate();
-
-	}
+	
 	public String doUpdate(String screenName, String insertClause, String whereclause) throws JSONException{
 	 
 		CrudDAO cd = new CrudDAO();
@@ -40,7 +36,7 @@ public class UpdateData {
 		debug(0, "lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
 		int queryResult = 0;
-		if (itrPanel.hasNext())
+		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
 			debug(0, "******** calling creteUpdateQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
