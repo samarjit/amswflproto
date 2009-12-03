@@ -36,7 +36,7 @@ public class UpdateData {
 		debug(0, "lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
 		int queryResult = 0;
-		while (itrPanel.hasNext())
+		if (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
 			debug(0, "******** calling creteUpdateQuery panel name#"+panelName+ " hmWhere:"+hmWhere);

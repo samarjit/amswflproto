@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <screenflows>
 	<screenflow key="loginflow" value="/scrflowxml/loginflow/loginflow.xml" />
+	<screenflow key="newwfl" value="/scrflowxml/newworkflow/newworkflow.xml" />
 </screenflows>

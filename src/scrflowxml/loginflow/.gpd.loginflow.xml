@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<root-container name="simple" width="651" height="362">
+<root-container name="simple" width="846" height="343">
   <node name="start" x="0" y="0" width="132" height="36">
     <edge>
       <label x="5" y="-10"/>

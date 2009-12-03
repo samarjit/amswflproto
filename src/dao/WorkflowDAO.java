@@ -21,7 +21,7 @@ public class WorkflowDAO {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -132,7 +132,7 @@ public class WorkflowDAO {
 	 * @param status
 	 * @param hmActions
 	 */
-	public void createApplication(String userid, long id,String appid,String status, HashMap hmActions) {
+	public void createApplicationWfl(String userid, long id,String appid,String status, HashMap hmActions) {
 		DBConnector db = new DBConnector();
 		int i =0;
 		String wherein="";
@@ -206,6 +206,14 @@ public class WorkflowDAO {
 		}
 		return screenName;	
 	}
+	/**
+	 * This function is called to mark the end of a stage 
+	 * @param userid
+	 * @param id
+	 * @param appid
+	 * @param status
+	 * @param action
+	 */
 	public void changeStageApplicationWfl(String userid, long id,
 			String appid, String status, int action) {
 		int i=0;
@@ -227,6 +235,15 @@ public class WorkflowDAO {
 		 
 					}
 	}
+	/**
+	 * This method marks beginnign of a new stage. If the stage is already in list it is updated to started once again(The stage got repeated due to workflow).
+	 * If the stage was not in list then a new insert will be done with status as started
+	 * @param userid
+	 * @param id
+	 * @param appid
+	 * @param status
+	 * @param hmActions
+	 */
 	public void updateApplicationWfl(String userid, long id, String appid,
 			String status, HashMap hmActions) {
 		CachedRowSet crs = null;
@@ -259,6 +276,129 @@ public class WorkflowDAO {
 					" ,'" +status+"'"+
 					" ,'" +appid+"'"+
 					",'"+action+"'"+
+					",'"+actoinName+"'"+
+					" ) ";
+					debug(1,SQL1);
+					result += db.executeUpdate(SQL);
+				}
+			} catch (SQLException e) {
+				debug(0, e.getMessage());
+			}finally{
+				if(crs!=null){
+					try {
+						crs.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
+				}
+			}
+		}
+		
+	}
+	public void createApplicationScrWfl(String userid, String wflName,String appid, String status, ArrayList<String> hmActions) {
+		DBConnector db = new DBConnector();
+		int i =0;
+		String wherein="";
+		Iterator itr1  = hmActions.iterator();
+		
+		while (itr1.hasNext()) {
+			String naction = (String) itr1.next();
+			wherein = ",'"+naction+"'";
+		} 
+		String SQL1="";
+		if(wherein.charAt(0)== ','   ){
+			wherein = wherein.substring(1);
+		}
+		SQL1 = "delete from USER_WFLID_APPID  where WFLID='"+wflName+"' AND  USERID='"+userid+"' AND APPID ='"+appid+"' AND WFLACTIONDESC in ("+wherein+") ";
+		try {
+			if(wherein.length() > 0){
+				debug(1,SQL1);
+				db.executeUpdate(SQL1);
+			}
+			 
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		 
+		 Iterator itr = hmActions.iterator();
+		 while (itr.hasNext()) {
+			String actoinName = (String) itr.next();
+			String action =  actoinName;
+			 
+			 try {
+			String SQL = "INSERT INTO  USER_WFLID_APPID (WFLID, USERID, STATUS,APPID,  WFLACTIONDESC)  " +
+					"VALUES ('" +wflName+"'"+
+					" ,'" +userid+"'"+
+					" ,'" +status+"'"+
+					" ,'" +appid+"'"+
+					//",'"+action+"'"+
+					",'"+actoinName+"'"+
+					" ) ";
+			debug(1,SQL);
+				i += db.executeUpdate(SQL);
+				
+				} catch (SQLException e) {
+					debug(0, e.getMessage());
+				}finally{
+					 
+				}
+		}
+		
+	}
+	public void changeStageApplicationScrWfl(String userid, String wflid,String appid, String status, String doString) {
+		int i=0;
+		 try {
+			  DBConnector db = new DBConnector(); 
+				String SQL = "update  USER_WFLID_APPID SET STATUS ='"+status+"' where   " +
+						" WFLID = '" +wflid+"'"+
+						" AND USERID = '" +userid+"'"+
+						" AND APPID='" +appid+"'"+
+						" AND WFLACTIONDESC='"+doString+"'"+
+						"   ";
+					debug(1, SQL); 
+					i += db.executeUpdate(SQL);
+					
+					} catch (SQLException e) {
+						debug(0, e.getMessage());
+					}finally{
+						 
+		 
+					}
+		
+	}
+	public void updateApplicationScrWfl(String userid, String wflid,String appid, String status, ArrayList<String> hmActions) {
+		CachedRowSet crs = null;
+		DBConnector db = new DBConnector();
+		int result=0;
+		 Iterator itr = hmActions.iterator();
+		 while (itr.hasNext()) {
+			String actoinName = (String) itr.next();
+			String action =  actoinName;
+
+			try {
+				String	 SQL1 = "select 'x' x from USER_WFLID_APPID  where WFLID='"+wflid+"' AND  USERID='"+userid+"' AND APPID ='"+appid+"' AND WFLACTIONDESC ='"+action +"' ";
+				debug(1,SQL1);
+				crs = db.executeQuery(SQL1);
+				if(crs.next()){
+					String SQL = "update  USER_WFLID_APPID SET STATUS ='"+status+"' where   " +
+					" WFLID = '" +wflid+"'"+
+					" AND USERID = '" +userid+"'"+
+					" AND APPID='" +appid+"'"+
+					" AND WFLACTIONDESC='"+action+"'"+
+					"   ";
+					debug(0, SQL); 
+					db.executeUpdate(SQL);
+					crs.close();
+					crs = null;
+				}else{
+					String SQL = "INSERT INTO  USER_WFLID_APPID (WFLID, USERID, STATUS,APPID,   WFLACTIONDESC)  " +
+					"VALUES ('" +wflid+"'"+
+					" ,'" +userid+"'"+
+					" ,'" +status+"'"+
+					" ,'" +appid+"'"+
+				//	",'"+action+"'"+
 					",'"+actoinName+"'"+
 					" ) ";
 					debug(1,SQL1);

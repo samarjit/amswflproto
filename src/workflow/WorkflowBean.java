@@ -1,5 +1,6 @@
 package workflow;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -134,7 +135,7 @@ wf.doAction(id, 1, inputs);*/
 
 	public void createApplicationWfl(String userid, long id, String appid,String status, HashMap hmActions) {
 		WorkflowDAO wflDAO = new WorkflowDAO();
-		wflDAO.createApplication( userid,  id, appid, status,hmActions);
+		wflDAO.createApplicationWfl( userid,  id, appid, status,hmActions);
 		
 	}
 
@@ -178,5 +179,26 @@ wf.doAction(id, 1, inputs);*/
 		Workflow wf = new BasicWorkflow(wflSession);
 		  wf.doAction(id, action, Collections.EMPTY_MAP);
 		
+	}
+
+	public ArrayList<String> getNextActions(String wflName, String currentAction) {
+		ScreenFlow scrfl = new ScreenFlow();
+		return scrfl.getNextActions(wflName, currentAction);
+		 
+	}
+
+	public void createApplicationScrWfl(String userid, String wflName,String appid, String status, ArrayList<String> hmActions) {
+		WorkflowDAO wflDAO = new WorkflowDAO();
+		wflDAO.createApplicationScrWfl(  userid,   wflName,  appid,   status,   hmActions);
+	}
+
+	public void changeStageApplicationScrWfl(String userid, String wflid,String appid, String status, String doString) {
+		WorkflowDAO wflDAO = new WorkflowDAO();
+		wflDAO.changeStageApplicationScrWfl(  userid,   wflid,  appid,   status,   doString);
+	}
+
+	public void updateApplicationScrWfl(String userid, String wflid,String appid, String status, ArrayList<String> hmActions) {
+		WorkflowDAO wflDAO = new WorkflowDAO();
+		wflDAO.updateApplicationScrWfl(  userid,   wflid,  appid,   status,   hmActions);
 	}
 }

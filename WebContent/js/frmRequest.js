@@ -76,7 +76,7 @@ function disable_fields(){
 		if (panelsTable[i].id == 'panelFields'){
 			
 		fields = panelsTable[i].getElementsByTagName("input");
-			alert("inside panel panels " + fields.length);
+		//	alert("inside panel panels " + fields.length);
 			for(var k = 0; k<fields.length; k++){
 			//	alert("inside panel panels " + fields[k].id);
 				fields[k].disabled = true;
@@ -304,4 +304,15 @@ function submitactivity(){
 		
 	}
 
-
+function submitScreenFlowactivity(){
+	alert("here in submit activity")
+	alert(wflcontrollerurl);
+	var applicationid = jQuery("#panelsdiv #panelFields  input[id=reqid]").attr("value");
+	alert(applicationid);
+	var actionid =  jQuery("#panelsdiv #statusFields input[id=wflactiondesc]").attr("value");
+	var wflid=jQuery("#panelsdiv #statusFields input[id=wflid]").attr("value");
+	
+	//document.getElementById("submitanchor").href //stealing from actionbutton.jsp its not the right way, if its coming from viewDetails this will be wrong anyway! 	
+	location.href = wflcontrollerurl+"?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+		
+	}

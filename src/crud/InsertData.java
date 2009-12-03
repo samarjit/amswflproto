@@ -14,7 +14,8 @@ import util.Utility;
 import dao.CrudDAO;
 
 public class InsertData {
-	public void log(String s){
+	public void debug(int priority, String s){
+		if(priority >0)
 		System.out.println(s);
 	}
 	/**
@@ -33,12 +34,12 @@ public class InsertData {
 		String htmlTemp = "";
 		CachedRowSet crs = null;
 		int insertResult = 0;
-		log("lstPanelName:"+lstPanelName);
+		debug(0, "lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
-		while (itrPanel.hasNext())
+		if (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
-			log("******** calling creteInsertQuery panel name#"+panelName + "insertClause" + insertClause);
+			debug(0, "******** calling creteInsertQuery panel name#"+panelName + "insertClause" + insertClause);
 		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
 			metadata = new HashMap();
 			//column metadata should get populated here
@@ -46,13 +47,13 @@ public class InsertData {
 			if(sg != null && !("".equals(sg))){
 				try {
 					insertResult  = cd.executeInsertQuery(sg);
-					System.out.println("inserted successfully");
+					debug(1,"inserted successfully");
 				} catch (Exception e) {
-					System.out.println("Failed in insert");
+					debug(5,"Failed in insert");
 					e.printStackTrace();
 					insertResult  = -1;
 				}
-				log("Insert query:" + sg);
+				debug(0, "Insert query:" + sg);
 			}						
 		}
 		html = String.valueOf(insertResult);
@@ -72,7 +73,7 @@ public class InsertData {
 			else
 				return "";	
 		} catch (JSONException e) {
-			System.out.println("Failed to extract insertClause");
+			debug(5,"Failed to extract insertClause");
 			e.printStackTrace();
 		}
 		
@@ -80,12 +81,12 @@ public class InsertData {
 		String tableName =  cd.findTableByPanels(scrname,panelName);
 		String splWhereClause = cd.findSplWhereClsOfPanels(scrname,panelName);
 		  		
-		System.out.println("table name:"+tableName);
+		debug(0,"table name:"+tableName);
 		
 		if(tableName!= null && tableName.length() >0 && qryPart1 !=null && qryPart1.size() > 0  && qryPart1.get("valuestr") != null){
 			insertQry ="INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")"; 
 		}else {
-			log("Incomplete query was:"+"INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")");
+			debug(0, "Incomplete query was:"+"INSERT INTO "+tableName+"("+qryPart1.get("dbcolstr")+") VALUES ("+qryPart1.get("valuestr")+")");
 		}
 		return insertQry;
 	}

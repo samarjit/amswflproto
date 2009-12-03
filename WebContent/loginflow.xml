@@ -10,7 +10,7 @@
 		<transition name="to_state" to="first">
          <action name="action" class="com.sample.action.MessageActionHandler">
             <message>Going to the first state!</message>
-         </action> 
+         </action>
       </transition>
 		<event type="after-signal">
 			<action name="sam" class="businesslogic.LoginBL"></action>

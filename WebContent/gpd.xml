@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process-diagram height="409" name="samproc" showActions="true" width="680">
+  <node height="60" name="Start" width="96" x="168" y="12">
+    <transition name="tr1"/>
+  </node>
+  <node height="60" name="Task Node1" width="96" x="60" y="180">
+    <transition name="tr1"/>
+  </node>
+  <node height="60" name="Decision1" width="96" x="156" y="108">
+    <transition name="tr1"/>
+    <transition name="tr2"/>
+  </node>
+  <node height="60" name="Task Node2" width="96" x="252" y="180">
+    <transition name="tr1"/>
+  </node>
+  <node height="5" name="Join1" width="96" x="180" y="300">
+    <transition name="tr1"/>
+  </node>
+  <node height="60" name="End" width="96" x="180" y="348"/>
+</process-diagram>

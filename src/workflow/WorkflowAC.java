@@ -1,5 +1,6 @@
 package workflow;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,7 @@ private String navigateto;
 
 private String action;
 
-private long wflid;
+private String wflid;
 private String appid;
 private String doString;
 
@@ -89,11 +90,111 @@ public String getForwardtourl() {
 public void setForwardtourl(String forwardtourl) {
 	this.forwardtourl = forwardtourl;
 }
+/**
+ * /workflow.action?activityname=CR&create=true
+ * /workflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+ */
+public String execute(){
+	String returnStr=SUCCESS;
+	UserDTO usrDTO = (UserDTO) session.get("userSessionData");	
+	String url=""; 
+	try {
+		if (request.get("create") != null) {
+			if (activityname != null && !"".equals(activityname)) {
+				ApplicationDTO appdto = new ApplicationDTO();
+				debug(0, "activityname:" + activityname);
+				String appid = wflBean.getNewApplicationId();
+				String WflName = wflBean.getSuitableWorkflowName(activityname);
+				//wflid = wflBean.workflowInit(appid, WflName, null);
+				ArrayList<String> hmActions = wflBean.getNextActions(WflName, ""); //rest of the places wflid = WflName
+				if ("".equals(url) && hmActions.size() > 0) {
+					String actionname = (String) hmActions.get(0);
+					url = wflBean.getScreenId(actionname);
+//					appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
+//					appdto.setCurrentAction(actionname);
+				}
+				wflBean.createApplicationScrWfl(usrDTO.getUserid(),WflName, appid, "S", hmActions);//'S' for started
+//				appdto.setWflactions(hmActions);
+//				appdto.setWflid(wflid);
+//				session.put("applicationDTO", appdto);
+			}
+		} else if (request.get("action") != null) {
+			//uses appid, wflid, doString
+//			ApplicationDTO appdto = (ApplicationDTO) session.get("applicationDTO");
+//			if (appdto == null)
+//				appdto = new ApplicationDTO();
+//			if (appid != null && appid.length() > 0) {
+//				appdto.setAppid(appid);
+//			}
+//			if (wflid != -1 && wflid > 0) {
+//				appdto.setWflid(wflid);
+//			}
+//
+//			String wflSession = appdto.getAppid();
 
-	public String execute(){
+			if (doString != null && !doString.equals("")) {
+//				int actionid = Integer.parseInt(doString);
+//				try {
+//					wflBean.doAction(wflSession/*appid*/, wflid, actionid);
+//
+//				} catch (InvalidInputException e) {
+//					e.printStackTrace();
+//				} catch (WorkflowException e) {
+//					e.printStackTrace();
+//				}
+				wflBean.changeStageApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "C", doString);//'S' for started
+			} else {
+				debug(5, "WorkflowAC:doString is null");
+			}
+			
+			debug(1, "AppId:" + appid+ "  screenflowid:" + wflid+ " doString:(expecting CreateRequest, RFQ etc..)" + doString + "  ");
+
+			ArrayList<String> hmActions = wflBean.getNextActions(wflid, doString);
+			if ("".equals(url) && hmActions.size() > 0) {
+				String actionname = (String) hmActions.get(0);
+				url = wflBean.getScreenId(actionname);
+//				appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
+//				appdto.setCurrentAction(actionname);
+			}
+			wflBean.updateApplicationScrWfl(usrDTO.getUserid(),wflid, appid, "S", hmActions);//'S' for started
+//			appdto.setWflid(wflid);
+//			appdto.setWflactions(hmActions);
+//			session.put("applicationDTO", appdto);
+		} else if (request.get("navigateto") != null) {
+//			ApplicationDTO appdto = (ApplicationDTO) session.get("applicationDTO");
+//			HashMap<String, Integer> hmactions = appdto.getWflactions();
+			String pageName = navigateto;
+			url = wflBean.getScreenId(pageName);
+//			appdto.setCurrentAction(pageName);
+//			appdto.setCurrentActionId(hmactions.get(pageName));
+//			appdto.setWflid(wflid);
+			
+		}
+	} catch (Exception e) {
+		debug(5,"Some Error has occured:"+e.getMessage());
+		e.printStackTrace();
+	}
+	redirecturl =  "/template1.action?screenName=frmRequestList";
+	
+	redirecturl =url;
+	if("".equals(redirecturl))redirecturl ="/pages/workflowcompleted.jsp";
+	returnStr = "flowcontroller";
+	return returnStr;	
+}
+
+
+
+/**
+ * /workflow.action?activityname=CR&create=true
+ * /workflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
+ */
+//Original using OSworkflow
+	public String execute1(){
 		String returnStr=SUCCESS;
 		UserDTO usrDTO = (UserDTO) session.get("userSessionData");	
 		String url=""; 
+		long worflowid = Long.parseLong(wflid);
+		
 		try {
 			if (request.get("create") != null) {
 				if (activityname != null && !"".equals(activityname)) {
@@ -101,17 +202,17 @@ public void setForwardtourl(String forwardtourl) {
 					debug(0, "activityname:" + activityname);
 					String appid = wflBean.getNewApplicationId();
 					String WflName = wflBean.getSuitableWorkflowName(activityname);
-					wflid = wflBean.workflowInit(appid, WflName, null);
-					HashMap<String, Integer> hmActions = wflBean.getAvailableActions(appid, wflid);
+					worflowid = wflBean.workflowInit(appid, WflName, null);
+					HashMap<String, Integer> hmActions = wflBean.getAvailableActions(appid, worflowid);
 					if ("".equals(url) && hmActions.size() > 0) {
 						String actionname = (String) hmActions.keySet().toArray()[0];
 						url = wflBean.getScreenId(actionname);
 						appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
 						appdto.setCurrentAction(actionname);
 					}
-					wflBean.createApplicationWfl(usrDTO.getUserid(), wflid,appid, "S", hmActions);//'S' for started
+					wflBean.createApplicationWfl(usrDTO.getUserid(), worflowid,appid, "S", hmActions);//'S' for started
 					appdto.setWflactions(hmActions);
-					appdto.setWflid(wflid);
+					appdto.setWflid(worflowid);
 					session.put("applicationDTO", appdto);
 				}
 			} else if (request.get("action") != null) {
@@ -122,8 +223,8 @@ public void setForwardtourl(String forwardtourl) {
 				if (appid != null && appid.length() > 0) {
 					appdto.setAppid(appid);
 				}
-				if (wflid != -1 && wflid > 0) {
-					appdto.setWflid(wflid);
+				if (worflowid != -1 && worflowid > 0) {
+					appdto.setWflid(worflowid);
 				}
 
 				String wflSession = appdto.getAppid();
@@ -131,29 +232,29 @@ public void setForwardtourl(String forwardtourl) {
 				if (doString != null && !doString.equals("")) {
 					int actionid = Integer.parseInt(doString);
 					try {
-						wflBean.doAction(wflSession/*appid*/, wflid, actionid);
+						wflBean.doAction(wflSession/*appid*/, worflowid, actionid);
 
 					} catch (InvalidInputException e) {
 						e.printStackTrace();
 					} catch (WorkflowException e) {
 						e.printStackTrace();
 					}
-					wflBean.changeStageApplicationWfl(usrDTO.getUserid(),wflid, wflSession /*appid*/, "C", Integer.parseInt(doString));//'S' for started
+					wflBean.changeStageApplicationWfl(usrDTO.getUserid(),worflowid, wflSession /*appid*/, "C", Integer.parseInt(doString));//'S' for started
 				} else {
 					debug(5, "WorkflowAC:doString is null");
 				}
 				
-				debug(1, "WflSession:" + wflSession + "  wflId:" + wflid+ " do:" + doString + "  ");
+				debug(1, "WflSession:" + wflSession + "  wflId:" + worflowid+ " do:" + doString + "  ");
 
-				HashMap<String, Integer> hmActions = wflBean.getAvailableActions(appid, wflid);
+				HashMap<String, Integer> hmActions = wflBean.getAvailableActions(appid, worflowid);
 				if ("".equals(url) && hmActions.size() > 0) {
 					String actionname = (String) hmActions.keySet().toArray()[0];
 					url = wflBean.getScreenId(actionname);
 					appdto.setCurrentActionId(hmActions.get(actionname));//used by actionbutton 
 					appdto.setCurrentAction(actionname);
 				}
-				wflBean.updateApplicationWfl(usrDTO.getUserid(), wflid,wflSession/*appid*/, "S", hmActions);//'S' for started
-				appdto.setWflid(wflid);
+				wflBean.updateApplicationWfl(usrDTO.getUserid(), worflowid,wflSession/*appid*/, "S", hmActions);//'S' for started
+				appdto.setWflid(worflowid);
 				appdto.setWflactions(hmActions);
 				session.put("applicationDTO", appdto);
 			} else if (request.get("navigateto") != null) {
@@ -163,7 +264,7 @@ public void setForwardtourl(String forwardtourl) {
 				url = wflBean.getScreenId(pageName);
 				appdto.setCurrentAction(pageName);
 				appdto.setCurrentActionId(hmactions.get(pageName));
-				appdto.setWflid(wflid);
+				appdto.setWflid(worflowid);
 				
 			}
 		} catch (Exception e) {
@@ -194,11 +295,11 @@ public void setForwardtourl(String forwardtourl) {
 		this.action = action;
 	}
 
-	public long getWflid() {
+	public String getWflid() {
 		return wflid;
 	}
 
-	public void setWflid(long wflid) {
+	public void setWflid(String wflid) {
 		this.wflid = wflid;
 	}
 
