@@ -12,7 +12,7 @@ import util.Utility;
 import dao.CrudDAO;
 
 public class DeleteData {
-	private void debug(int priority, String s){
+	public void log(String s){
 		System.out.println(s);
 	}
 	/**
@@ -21,35 +21,46 @@ public class DeleteData {
 	 * @param args
 	 * @throws JSONException 
 	 */
-	public static void main(String[] args) throws JSONException {
-		DeleteData dd = new DeleteData();
-		dd.doDelete();
-
-	}
-	public void doDelete() throws JSONException{
+	
+	public String doDelete(String screenName, String whereClause) throws JSONException{
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
-		String scrName="frmRequest";
+		String sg = null;
+		String scrName=screenName;
 		List <String> lstPanelName = cd.findPanelByScrname(scrName);
-		HashMap<String, String> hmWhere = Utility.extractWhereClause( "empid!0~#empname!sam samanta"/*String whereStringOfPanel, String panelName */);
+		HashMap<String, String> hmWhere = Utility.extractWhereClause(whereClause);
 		String html = ""; //outer
 		String htmlTemp = "";
+		int queryResult = 0 ;
 		CachedRowSet crs = null;
-		debug(0, "lstPanelName:"+lstPanelName);
+		log("lstPanelName:"+lstPanelName);
 		Iterator itrPanel = lstPanelName.iterator();
 		while (itrPanel.hasNext())
 		{ 
 			String panelName = (String) itrPanel.next();
-			debug(0, "******** calling creteDeleteQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
+			log("******** calling creteDeleteQuery panel name#"+panelName+ " hmWhere:"+hmWhere);
 		    //if you allocate the HashMap inside createRetrieveQuery1 then it returns null by the time it comes here
 			metadata = new HashMap();
 			//column metadata should get populated here
-			String sg = createDeleteQuery(metadata, scrName,	panelName, hmWhere);
-			debug(0, "Delete query:" + sg);
+			 sg = createDeleteQuery(metadata, scrName,	panelName, hmWhere);
+			 //debug(2, "Update query:" + sg);
+				if(sg != null && !("".equals(sg))){
+					try {
+						queryResult = cd.executeInsertQuery(sg);
+					} catch (Exception e) {
+						//debug(5,"Failed in update");
+						e.printStackTrace();
+						queryResult = -1;
+					}
+					 
+				}		
+				
+			}
 			
-		}
+			html = String.valueOf(queryResult);
+			return html;
 	}
-	
+
 	public String createDeleteQuery(HashMap metadata,String scrname,String panelName, HashMap<String,String> hmWherePanel) {
 		String delQuery = "";
 		String joiner = " WHERE ";
@@ -76,7 +87,7 @@ public class DeleteData {
 				delQuery ="DELETE  " + " FROM "+tableName+splWhereClause+strWhereQuery; 
 		}
 		else {
-			debug(0, "Incomplete query was:"+"DELETE " + " FROM "+tableName+splWhereClause+strWhereQuery);
+			log("Incomplete query was:"+"DELETE " + " FROM "+tableName+splWhereClause+strWhereQuery);
 		}
 		return delQuery;
 	}
