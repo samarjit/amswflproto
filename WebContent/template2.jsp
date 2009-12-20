@@ -54,7 +54,7 @@ template 2
 </select --%>
 <input type="hidden" name="screenName" id="screenName" />
 <input type="hidden" id="panelFieldsWhereClause" name="panelFieldsWhereClause" value="">
-<input type="submit" value="view" onclick="return makeWhereClause()" />
+<input type="submit" value="view" onclick="return viewdetails()" />
 <input type="submit" value="Create Request" onclick="clearWhereClause()"/>
 </form>
 

@@ -19,7 +19,7 @@ yAdjust:<input name="yadjust" value="-2"/>
 </form>
 
 <div id="workflowCanvas" style="position:relative;height:566px;width:508px;">
-<img src="graph.gif" border=0/>
+<img src="processimage.jpg" border=0/>
 </div>
 <script type="text/javascript" src="js/wz_jsgraphics.js"></script>
 <script type="text/javascript" src="js/xmlextras.js"></script>
@@ -28,7 +28,7 @@ var actiondesc = "<%=request.getParameter("actiondesc") %>";
 
 var xmlHttp = XmlHttp.create();
 var async = true;
-xmlHttp.open("GET", "gpd.xml", async);
+xmlHttp.open("GET", ".gpd.newworkflow.xml", async);
 xmlHttp.onreadystatechange = function () {
     if (xmlHttp.readyState == 4){
         //set up graphics

@@ -173,6 +173,7 @@ public String execute(){
 	} catch (Exception e) {
 		debug(5,"Some Error has occured:"+e.getMessage());
 		e.printStackTrace();
+		url="/pages/workflowerror.jsp";
 	}
 	redirecturl =  "/template1.action?screenName=frmRequestList";
 	

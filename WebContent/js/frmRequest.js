@@ -20,12 +20,12 @@ function clearWhereClause(){
 function requestCallBack(p){
 	//alert("Got from ajax:"+p);
 
-	document.getElementById("searchdiv").innerHTML = p;	
+	document.getElementById("retreivedetailsdiv").innerHTML = p;	
 	panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 	//alert(panelsTable.length);
 
 
-	detailTable    = document.getElementById("searchdiv").getElementsByTagName("table");
+	detailTable    = document.getElementById("retreivedetailsdiv").getElementsByTagName("table");
 
 	for ( var i=0; i<detailTable.length ; i++)
 	{
@@ -205,7 +205,7 @@ function updateData(obj){
 	screenMode = "modify";
 		//There will be only one table in search screen 'search div'
 		//document.requestFrm.submit();
-		listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
+		listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
 
 panelsTable = document.getElementById("panelsdiv").getElementsByTagName("table");
 
@@ -255,7 +255,7 @@ function makeWhereClause(){
 	// alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
 	
-	listTable = document.getElementById("searchdiv").getElementsByTagName("table")[0];
+	listTable = document.getElementById("retreivedetailsdiv").getElementsByTagName("table")[0];
 
 	whereClause = "panelFields1WhereClause=";
 	if(listTable != null){
@@ -265,15 +265,15 @@ function makeWhereClause(){
 		for (i = 0; i <listTable.rows[0].cells.length ; i++ )
 		{  
 			//alert(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]);
-			if(jQuery("#searchdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
-				name = jQuery("#searchdiv").find(" table  tbody tr th").eq(i).find("div").text().split(',')[2];	 
+			if(jQuery("#retreivedetailsdiv").find(" table tbody tr th").eq(i).find(" div").text().split(',')[6]  == "Y") {
+				name = jQuery("#retreivedetailsdiv").find(" table  tbody tr th").eq(i).find("div").text().split(',')[2];	 
 				name = jQuery.trim(name);
-				value = jQuery("#searchdiv").find(" table tbody tr").eq(1).find(" td").eq(i).text();
+				value = jQuery("#retreivedetailsdiv").find(" table tbody tr").eq(1).find(" td").eq(i).text();
 				value = jQuery.trim(value);
 				whereClause = whereClause + name + "!" + value + "~#";
 				requestar[j] = new KeyValue(name, value);				
 				j++;		
-				//alert(jQuery("#searchdiv table th:eq("+i+") div").text());
+				//alert(jQuery("#retreivedetailsdiv table th:eq("+i+") div").text());
 			}
 		}
 		var k = new Object();

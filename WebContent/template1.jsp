@@ -81,7 +81,7 @@ LinkedHashMap hm =(LinkedHashMap)( request.getAttribute("extraFields"));
 </tr>
 </table>
 
-<div id=searchdiv >
+<div id="retreivedetailsdiv" >
 </div>
 
 </body>

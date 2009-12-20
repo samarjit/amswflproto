@@ -13,6 +13,7 @@ import dao.CrudDAO;
 
 public class DeleteData {
 	private void debug(int priority, String s){
+		if(priority >0)
 		System.out.println(s);
 	}
 	/**
@@ -43,7 +44,7 @@ public class DeleteData {
 			metadata = new HashMap();
 			//column metadata should get populated here
 			 sg = createDeleteQuery(metadata, scrName,	panelName, hmWhere);
-			 //debug(0, "Delete query:" + sg);
+			 debug(1, "Delete query:" + sg);
 				if(sg != null && !("".equals(sg))){
 					try {
 						queryResult = cd.executeInsertQuery(sg);
@@ -80,7 +81,7 @@ public class DeleteData {
 		}
 		//process where clause
 		String strWhereQuery  = cd.createWhereClause(joiner,scrname,panelName,hmWherePanel,true);
-		System.out.println("strWhereQuery="+strWhereQuery+"table name:"+tableName);
+		debug(0,"strWhereQuery="+strWhereQuery+"table name:"+tableName);
 		
 		if(tableName!= null && tableName.length() >0 && strWhereQuery!=null && strWhereQuery.length()>0)
 		{

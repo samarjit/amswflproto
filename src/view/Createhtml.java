@@ -172,7 +172,8 @@ public class Createhtml {
 					elmStr = lblname;
 				//	htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol)*2, "");
 				//	elmStr = "<input type=\"button\" name='"+fname+"' id='"+idname+"' value='"+lblname+"'  "+validation+" />";
-					elmStr = "<div class=\"clear\" "+validation+"><a href=\"#\" class=\"button\" name='"+fname+"' id='"+idname+"'     ><SPAN>"+lblname+"</SPAN></a></div>";
+				//	elmStr = "<div class=\"clear\" "+validation+"><a href=\"#\" class=\"button\" name='"+fname+"' id='"+idname+"'     ><SPAN>"+lblname+"</SPAN></a></div>";
+					elmStr = "<button "+validation+" class=\"button\" name='"+fname+"' id='"+idname+"'     >"+lblname+"</button>";
 					htable.add(Integer.parseInt(nrow), Integer.parseInt(ncol), elmStr);
 				}
 			

@@ -124,7 +124,7 @@ function replacer(key, value) {
 }
 
 
-function makeWhereClause(){
+function viewdetails(){
  
 	// alert("in make url,selectedIdx:"+selectedIdx);
 	//There will be only one table in search screen 'search div'
