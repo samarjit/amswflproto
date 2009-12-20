@@ -24,18 +24,17 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 </script>
 <body>
 <%@ include file="pages/header.jsp" %>
-template 2
- <s:property value="screenName"/> 
+
  
 <table> 
 <tr>
 <td>
 <s:property value="dataPanel" escape="false"/>
- Using Iterator
+
  <s:iterator  value="extraFields" >
  <s:set var="som" value="key" />
  <s:if test="#som != 'buttonPanel' && #som == 'searchPanel'">  
- <div id='<s:property value="key"/>'> <s:property value="key"/><s:property value="value" escape="false"/></div>
+ <div id='<s:property value="key"/>'> <%--s:property value="key"/--%><s:property value="value" escape="false"/></div>
  </s:if>
  </s:iterator>
 </td>
@@ -47,7 +46,7 @@ template 2
 </table>
 
 
-<form action="template1.action" id="formwhere" >
+<form action="template1.action" id="formwhere" style="display:none">
 <%-- select name="screenName" >
 <option >frmRequest</option>
 <option >frmRequestList</option> 
@@ -59,8 +58,8 @@ template 2
 </form>
 
 
-<input type="button" onclick="search()" value="send ajax" />
-<div class="clear" ><a href="#" class="button" name='search' id='search'    onclick="search();" ><SPAN>Search</SPAN></a></div>
+<%--input type="button" onclick="search()" value="send ajax" />
+<div class="clear" ><a href="#" class="button" name='search' id='search'    onclick="search();" ><SPAN>Search</SPAN></a></div--%>
 <div id="searchdiv"></div>
  
 

@@ -22,8 +22,8 @@ document.getElementById("formId0").submit();
 
 <br/>
 <FORM METHOD="GET" ACTION="${pageContext.servletContext.contextPath}/ScreenFlowControllerServlet" id="formId0">
-<input type="text" name="screenflowname" value="loginflow"/>
-<input type="text" name="currentaction" value="start"/> 
+<input type="hidden" name="screenflowname" value="loginflow"/>
+<input type="hidden" name="currentaction" value="start"/> 
 <div id="itsthetable" style="width:auto"> 
 <TABLE id="login">
 <thead>

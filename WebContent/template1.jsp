@@ -34,17 +34,17 @@ var whereClause= '<s:property value="%{#parameters.panelFieldsWhereClause}"/>';
 <body onload="populate()">
 <%String ctxpath=request.getContextPath(); %>
 <%@ include file="pages/header.jsp" %>
-The following part is filled using template and DB
+<!-- The following part is filled using template and DB -->
 <table> 
 <tr>
 <td>
 <div id=panelsdiv > 
 <s:property value="dataPanel" escape="false"/>
- Using Iterator
+ <!-- Using Iterator -->
  <s:iterator  value="extraFields" >
  <s:set var="som" value="key" />
  <s:if test="#som != 'buttonPanel'">  
- <s:property value="key"/> <s:property value="value" escape="false"/>
+ <%--s:property value="key"/--%> <s:property value="value" escape="false"/>
  </s:if>
  </s:iterator>
  </div>
@@ -56,7 +56,7 @@ The following part is filled using template and DB
 </tr>
 </table>
 
-Extra fields:
+<!-- Alternate display of extra fields -->
 <table> 
 <tr>
 <td>
@@ -81,7 +81,17 @@ LinkedHashMap hm =(LinkedHashMap)( request.getAttribute("extraFields"));
 </tr>
 </table>
 
-<div id="retreivedetailsdiv" >
+<script>
+function toggle(){
+	if(document.getElementById("retreivedetailsdiv").style.display == "none"){
+		document.getElementById("retreivedetailsdiv").style.display = "block";
+	}else{
+		document.getElementById("retreivedetailsdiv").style.display = "none";
+	}
+}
+</script>
+<button onclick="toggle()">+</button>
+<div id="retreivedetailsdiv" style="display:block">
 </div>
 
 </body>
