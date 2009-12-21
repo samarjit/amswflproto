@@ -94,7 +94,7 @@ public void setForwardtourl(String forwardtourl) {
  * /workflow.action?activityname=CR&create=true
  * /workflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
  */
-public String execute(){
+public String execute1(){
 	String returnStr=SUCCESS;
 	UserDTO usrDTO = (UserDTO) session.get("userSessionData");	
 	String url=""; 
@@ -190,11 +190,13 @@ public String execute(){
  * /workflow.action?action=true&doString="+actionid+"&wflid="+wflid+"&appid="+applicationid;
  */
 //Original using OSworkflow
-	public String execute1(){
+	public String execute(){
 		String returnStr=SUCCESS;
 		UserDTO usrDTO = (UserDTO) session.get("userSessionData");	
 		String url=""; 
-		long worflowid = Long.parseLong(wflid);
+		long worflowid = -1;
+		if(wflid != null && !"".equals(wflid))
+		worflowid = Long.parseLong(wflid);
 		
 		try {
 			if (request.get("create") != null) {

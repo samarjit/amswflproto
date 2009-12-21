@@ -11,7 +11,7 @@
 <title>New Page</title>
 <style>
 @import "<%=ctxstr %>/css/button.css";
- 
+@import "<%=ctxstr %>/css/header.css"; 
 </style>
 </head>
 <script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
@@ -24,7 +24,7 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 </script>
 <body>
 <%@ include file="pages/header.jsp" %>
-
+<div id="page">
  
 <table> 
 <tr>
@@ -62,6 +62,6 @@ var screenName= '<s:property value="%{#parameters.screenName}"/>' ;
 <div class="clear" ><a href="#" class="button" name='search' id='search'    onclick="search();" ><SPAN>Search</SPAN></a></div--%>
 <div id="searchdiv"></div>
  
-
+</div> <!-- id = page -->
 </body>
 </html>

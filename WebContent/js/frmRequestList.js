@@ -15,7 +15,7 @@ function search(){
 	sendAjaxGet(url,mycall);
 }
 function mycall(p){
-	alert("Got from ajax:"+p);
+	//alert("Got from ajax:"+p);
 	document.getElementById("searchdiv").innerHTML = p;
 	addSelectEvents();
 }
@@ -28,7 +28,7 @@ function cleanUp() {
 	var arobj = document.getElementById("searchdiv").getElementsByTagName("TR");
 
 	for (var i =1 ; i < arobj.length; i++) {
-		arobj[i].style.backgroundColor= "#d0d0a0";
+		arobj[i].style.backgroundColor= "#E7FFBF";
 	}
 }
 
@@ -87,7 +87,7 @@ document.onclick = function(e){
 	var arTH = obj.getElementsByTagName("TH");
 	 if(arTH.length == 0 ){
 		 selectedIdx  = obj.rowIndex;
-	  obj.style.backgroundColor= "#a0b0a0";
+	  obj.style.backgroundColor= "#C5FF60";
 	 }
 
 	}
@@ -103,7 +103,7 @@ function addSelectEvents(){
 			srchdv[i].onclick=function(p){
 			 cleanUp();
 			 selectedIdx  = this.rowIndex;
-			  this.style.backgroundColor= "#a0b0a0";
+			  this.style.backgroundColor= "#D6F1A3";
 				}
 			}
 		}

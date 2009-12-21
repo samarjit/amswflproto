@@ -64,19 +64,21 @@ public class Createhtml {
 	
 	public String makehtml(String screenName, String panelName){
 		String elmStr="";
+		String panelCssClassName = "";
 		HTable htable =null;
 		DBConnector db = new DBConnector();
 		//1: two rows per entry for label field type, 2: for one column per entry
 		int panelType = COL2ENTRY1; 
 		
 		String paneltypeSQL = 
-			"select paneltype from screen_panel where panel_name = '"+panelName+"' and scr_name='"+screenName+"'";
+			"select paneltype, CSS_CLASS from screen_panel where panel_name = '"+panelName+"' and scr_name='"+screenName+"'";
 
 		//System.out.println(paneltypeSQL);
 		try{
 			CachedRowSet crs = db.executeQuery(paneltypeSQL);
 			if(crs.next()){
 				String panel  = crs.getString("paneltype");
+				panelCssClassName = crs.getString("CSS_CLASS");
 				if(null!=panel && !"".equalsIgnoreCase(panel))
 				     panelType = Integer.parseInt(panel);  //else paneltype =  COL2ENTRY1;
 				else {
@@ -123,6 +125,7 @@ public class Createhtml {
 			nrow="0";
 			htable.setTableId(panelName);
 			
+			htable.setCssClassName(panelCssClassName);
 			while(crs.next()){
 				
 			

@@ -201,7 +201,7 @@ function prepareInsertData() {
 
 
 function updateData(obj){
-	obj.disabled = true;
+	//obj.disabled = true;
 	screenMode = "modify";
 		//There will be only one table in search screen 'search div'
 		//document.requestFrm.submit();
@@ -219,19 +219,20 @@ for(var m =0; m<panelsTable.length;m++){
 		//	alert("inside panel panels " + fields[k].id);
 			for (i = 0; i <listTable.rows[0].cells.length ; i++ )
 			{
-				//alert(fields[k].id);
-				if(!(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[6]  == 'Y')) {
+				// alert(fields[k].id);
+				// alert(jQuery(listTable.rows[0].cells[i]).text());
+				if(!(jQuery(listTable.rows[0].cells[i]).text().split(',')[6]  == 'Y')) {
 					
-					if(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[3] == fields[k].id){
+					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[3] == fields[k].id){
 						
 						fields[k].disabled = false;
 				}
 			}
 				
 				//for date
-if((listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[4] == 'DATE')) {
+				if((jQuery(listTable.rows[0].cells[i]).text().split(',')[4] == 'DATE')) {
 					
-					if(listTable.rows[0].cells[i].childNodes[0].innerText.split(',')[3] == fields[k].id){
+					if(jQuery(listTable.rows[0].cells[i]).text().split(',')[3] == fields[k].id){
 						fields[k].disabled = true;
 				}
 			} 

@@ -16,8 +16,8 @@ long id = Long.parseLong(request.getParameter("id"));
 <body>
 <form action="#" method="GET">
 id:<input name="id" value="<%= request.getParameter("id") %>"/>
-xAdjust:<input name="xadjust" value="1"/>
-yAdjust:<input name="yadjust" value="-5"/>
+xAdjust:<input name="xadjust" value="-8"/>
+yAdjust:<input name="yadjust" value="-7"/>
 <input type="submit" />
 </form>
 
@@ -46,13 +46,13 @@ xmlHttp.onreadystatechange = function () {
         var yAdjust = -17;
         var widthAdjust = 3;
         var heightAdjust = 2;*/
-        var xAdjust = 1;
+        var xAdjust = -8;
         <%if(null != request.getParameter("xadjust")){%>
          xAdjust = <%=request.getParameter("xadjust") %>;
          document.getElementsByName("xadjust")[0].value=xAdjust;
         <%} %>
       
-        var yAdjust = -5;
+        var yAdjust = -7;
         <% if(null != request.getParameter("yadjust")){%>
          yAdjust = <%=request.getParameter("yadjust") %>;
          document.getElementsByName("yadjust")[0].value=yAdjust;

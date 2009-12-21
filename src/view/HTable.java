@@ -9,7 +9,14 @@ public class HTable {
 	private int col;
 	private ArrayList<ArrayList<String>> tdata;
 	private String panelName;
+	private String cssClassName="";
 
+	public String getCssClassName() {
+		return cssClassName;
+	}
+	public void setCssClassName(String cssClassName) {
+		this.cssClassName = cssClassName;
+	}
 	public HTable(int row, int col) {
 		
 			tdata = new ArrayList<ArrayList<String>>();
@@ -35,6 +42,7 @@ public class HTable {
 
 	public String toString(){
 		String tstring ="";
+		String cssString = "";
 		for(int i =0 ; i<row;i++){
 			ArrayList<String> trow = tdata.get(i);
 			tstring +="<TR>";
@@ -44,11 +52,14 @@ public class HTable {
 			}
 			tstring +="</TR>\n";
 		}
+		if(!"".equals(cssClassName))
+		cssString = "class='"+cssClassName+"'";
+		
 		if(panelName!=null && !("".equals(panelName))){
-			tstring ="<TABLE border=1 id="+ panelName +">"+tstring +"</TABLE>";
+			tstring ="<TABLE border=1 id="+ panelName +" "+cssString+">"+tstring +"</TABLE>";
 		}
 		else{
-			tstring ="<TABLE border=1>"+tstring +"</TABLE>";
+			tstring ="<TABLE border=1 "+cssString+">"+tstring +"</TABLE>";
 		}
 		return tstring;
 	}

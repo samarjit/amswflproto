@@ -10,7 +10,7 @@
 <%String ctxstr = request.getContextPath(); %>
 <style>
 @import "<%=ctxstr %>/css/button.css";
-
+@import "<%=ctxstr %>/css/header.css";
 </style>
 <script language="JavaScript" src="<%=ctxstr %>/js/commonjs.js"></script>
 
@@ -34,6 +34,7 @@ var whereClause= '<s:property value="%{#parameters.panelFieldsWhereClause}"/>';
 <body onload="populate()">
 <%String ctxpath=request.getContextPath(); %>
 <%@ include file="pages/header.jsp" %>
+<div id="page">
 <!-- The following part is filled using template and DB -->
 <table> 
 <tr>
@@ -82,17 +83,19 @@ LinkedHashMap hm =(LinkedHashMap)( request.getAttribute("extraFields"));
 </table>
 
 <script>
-function toggle(){
+function toggle(objthis){
 	if(document.getElementById("retreivedetailsdiv").style.display == "none"){
 		document.getElementById("retreivedetailsdiv").style.display = "block";
+		objthis.innerHTML = "-";
 	}else{
 		document.getElementById("retreivedetailsdiv").style.display = "none";
+		objthis.innerHTML = "+";
 	}
 }
 </script>
-<button onclick="toggle()">+</button>
-<div id="retreivedetailsdiv" style="display:block">
+<button onclick="toggle(this)">+</button>
+<div id="retreivedetailsdiv" style="display:none">
 </div>
-
+</div> <!-- id = page -->
 </body>
 </html>

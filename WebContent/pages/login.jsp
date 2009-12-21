@@ -31,8 +31,8 @@ document.getElementById("formId0").submit();
 <tr><td>User ID</td><td><input type="text" name="username"  /></td></tr>
 <tr><td>Password </td><td>
 <input type="text" value="" name="password" /> </td></tr>
-<tr><td><a href="#" class="button"   onclick="javascript:document.forms[0].reset();this.blur();" ><span>Reset</span></a> 
-</td><td><a href="#" class="button"   onclick="fnsubmit();this.blur();" ><span>Login</span></a></td></tr>
+<tr><td><button href="#" class="button"   onclick="javascript:document.forms[0].reset();this.blur();" ><span>Reset</span></button> 
+</td><td><button href="#" class="button"   onclick="fnsubmit();this.blur();" ><span>Login</span></button></td></tr>
 </TABLE> 
 </div>
 </FORM>
