@@ -26,6 +26,7 @@ location.href=url;
 <li><a href="template1.action?screenName=frmRequestList">Request</a></li>
 <li><a href="#">RFQ</a> </li>
 <li><a href="#">Quotation</a></li>
+<li><a href="logout.action">Logout</a></li>
 </ul>
 <br/>
 </div>

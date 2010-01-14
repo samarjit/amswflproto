@@ -106,7 +106,7 @@ public String execute1(){
 				String appid = wflBean.getNewApplicationId();
 				String WflName = wflBean.getSuitableWorkflowName(activityname);
 				//wflid = wflBean.workflowInit(appid, WflName, null);
-				ArrayList<String> hmActions = wflBean.getNextActions(WflName, ""); //rest of the places wflid = WflName
+				ArrayList<String> hmActions = wflBean.getNextScrFlowActions(WflName, ""); //rest of the places wflid = WflName
 				if ("".equals(url) && hmActions.size() > 0) {
 					String actionname = (String) hmActions.get(0);
 					url = wflBean.getScreenId(actionname);
@@ -149,7 +149,7 @@ public String execute1(){
 			
 			debug(1, "AppId:" + appid+ "  screenflowid:" + wflid+ " doString:(expecting CreateRequest, RFQ etc..)" + doString + "  ");
 
-			ArrayList<String> hmActions = wflBean.getNextActions(wflid, doString);
+			ArrayList<String> hmActions = wflBean.getNextScrFlowActions(wflid, doString);
 			if ("".equals(url) && hmActions.size() > 0) {
 				String actionname = (String) hmActions.get(0);
 				url = wflBean.getScreenId(actionname);

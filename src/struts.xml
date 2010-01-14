@@ -11,6 +11,11 @@
 			<result name="error">/pages/error.jsp</result>
 	
 		</action>
+		<action name="logout" class="view.login" method="logout">
+			<result name="success">/pages/login.jsp</result>
+			<result name="error">/pages/error.jsp</result>
+	
+		</action>
 	</package>
 	
 	<package name="workflow" namespace="/" extends="struts-default">
@@ -27,12 +32,12 @@
 	</package>
 	
 	<package name="default2" namespace="/" extends="struts-default">
-		<action name="dynamic" class="view.GenerateHtml">
+		<action name="dynamic" class="view.GenerateHtmlAC">
 			<result  name="success">/index.jsp</result>
 		</action>
 	</package>
 	<package name="template1" namespace="/" extends="struts-default">
-		<action name="template1" class="view.GenerateHtml">
+		<action name="template1" class="view.GenerateHtmlAC">
 			<result name="success">/login.jsp</result>
 			<result name="template1">/template1.jsp</result>
 			<result name="template2">/template2.jsp</result>

@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-public class GenerateHtml extends ActionSupport{
+public class GenerateHtmlAC extends ActionSupport{
 public String user;
 public String password;
 public String dataPanel;

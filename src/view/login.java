@@ -96,7 +96,12 @@ public class login extends ActionSupport implements ServletRequestAware{
 		}
 		return SUCCESS;
 	}
-
+	public String logout(){
+		System.out.println("logged out");
+		HttpSession session = request.getSession(false);
+		session.invalidate();
+		return SUCCESS;
+	}
 	 
 	@Override
 	public void setServletRequest(HttpServletRequest req) {

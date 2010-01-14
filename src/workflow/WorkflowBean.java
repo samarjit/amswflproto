@@ -181,7 +181,7 @@ wf.doAction(id, 1, inputs);*/
 		
 	}
 
-	public ArrayList<String> getNextActions(String wflName, String currentAction) {
+	public ArrayList<String> getNextScrFlowActions(String wflName, String currentAction) {
 		ScreenFlow scrfl = new ScreenFlow();
 		return scrfl.getNextActions(wflName, currentAction);
 		 
