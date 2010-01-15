@@ -32,7 +32,7 @@ public class RetreiveData  {
 	
 	
 	
-	public String doRetrieveData(String scrName, String whereClause2) throws Exception{
+	public String doRetrieveData(String scrName, String whereClause) throws Exception{
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
 		List <String> lstPanelName = cd.findPanelByScrname(scrName);
@@ -163,7 +163,7 @@ public class RetreiveData  {
 	public static void main(String[] args) throws Exception{
 		
 		RetreiveData rd = new RetreiveData();
-		rd.doRetrieveData("empid!0~#empname!sam samanta");
+		rd.doRetrieveData("frmRequest","empid!0~#empname!sam samanta");
 	} 
 	
 	/**
