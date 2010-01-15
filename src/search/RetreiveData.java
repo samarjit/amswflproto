@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
+
+import businesslogic.BaseBL;
 
 import util.Utility;
 
@@ -19,7 +23,7 @@ import dbconn.DBConnector;
 
 
 
-public class RetreiveData {
+public class RetreiveData  {
 	
 	private void debug(int priotiry, String s){
 		if(priotiry > 0)
@@ -28,10 +32,9 @@ public class RetreiveData {
 	
 	
 	
-	public String doRetrieveData(String whereClause) throws Exception{
+	public String doRetrieveData(String scrName, String whereClause2) throws Exception{
 		CrudDAO cd = new CrudDAO();
 		HashMap metadata = null;
-		String scrName="frmRequest";
 		List <String> lstPanelName = cd.findPanelByScrname(scrName);
 		HashMap<String, String> hmWhere = Utility.extractWhereClause( whereClause/*String whereStringOfPanel, String panelName */);
 		HashMap<String,HashMap<String,String>> tempData = new HashMap<String, HashMap<String,String>>();
@@ -209,6 +212,10 @@ public class RetreiveData {
 		
 		return retrieveQuery;
 	}
+
+
+
+	
 	
 
 }
