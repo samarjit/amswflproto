@@ -29,4 +29,16 @@ public class LoginBL implements BaseBL {
 		return null;
 	}
 
+	@Override
+	public HashMap postRetreiveProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HashMap preRetreiveProcessBL(Map buslogHm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

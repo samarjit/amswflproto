@@ -408,4 +408,22 @@ public class CrudDAO {
 				return inesrtqryPart;
 	}
 
+	public String getBusinessLogicName(String screenName) {
+		DBConnector db = new DBConnector();
+		CachedRowSet crs = null;
+		String businesslogicname = null;
+		String SQL = "select BUSINESSLOGIC from screen where scr_name = '"+screenName+"' ";
+		try {
+			crs = db.executeQuery(SQL);
+			while(crs.next()){
+				businesslogicname = crs.getString("BUSINESSLOGIC");	
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+			
+		return businesslogicname;
+	}
+
 }
