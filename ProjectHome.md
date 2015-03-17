@@ -1,0 +1,1 @@
+Long forgottern OS workflow is being reinvented. This is a webapplication aimed at using dynamic screens and a workflow to wade through the screens. Hopefully it will also provide some business value.
